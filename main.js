@@ -915,6 +915,76 @@ function checkAndShowPlanetLabels(cameraPosition, phase) {
 
 
 // ========================================
+// Skip fonctionnalité
+// ========================================
+
+function skipCinematicAnimation() {
+    if (!cinematicAnimation || !cinematicAnimation.active) return;
+
+    // Mark as skipped
+    cinematicAnimation.skipped = true;
+    cinematicAnimation.active = false;
+
+    // Smooth transition to final position (0.5s)
+    const currentPos = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+    const targetPos = { x: 80, y: 60, z: 120 };
+    const skipDuration = 500;
+    const skipStartTime = Date.now();
+
+    function skipTransition() {
+        const elapsed = Date.now() - skipStartTime;
+        const progress = Math.min(elapsed / skipDuration, 1);
+        const eased = EASING.easeOutCubic(progress);
+
+        camera.position.x = currentPos.x + (targetPos.x - currentPos.x) * eased;
+        camera.position.y = currentPos.y + (targetPos.y - currentPos.y) * eased;
+        camera.position.z = currentPos.z + (targetPos.z - currentPos.z) * eased;
+        camera.lookAt(0, 0, 0);
+
+        if (progress < 1) {
+            requestAnimationFrame(skipTransition);
+        } else {
+            // Finalize
+            controls.enabled = true;
+            controls.target.set(0, 0, 0);
+            introActive = false;
+            document.querySelectorAll('.hud-panel').forEach(p => p.classList.remove('hidden'));
+        }
+    }
+
+    // Clean up effects immediately
+    hideSkipIndicator();
+    hideDistanceCounter();
+    clearAllPlanetLabels();
+    updateWarpEffect(0);
+
+    // Reset label flags
+    Object.values(planets).forEach(planet => {
+        if (planet.labelShown) delete planet.labelShown;
+    });
+
+    // Start transition
+    skipTransition();
+}
+
+function setupSkipListeners() {
+    const handleSkip = (e) => {
+        if (cinematicAnimation && cinematicAnimation.active) {
+            if (e.type === 'keydown' && (e.key === ' ' || e.key === 'Escape')) {
+                e.preventDefault();
+                skipCinematicAnimation();
+            } else if (e.type === 'click') {
+                skipCinematicAnimation();
+            }
+        }
+    };
+
+    document.addEventListener('keydown', handleSkip);
+    document.addEventListener('click', handleSkip);
+}
+
+
+// ========================================
 // Animation d'introduction
 // ========================================
 
