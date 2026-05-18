@@ -716,12 +716,17 @@ body {
     bottom: 5%;
     right: 5%;
     font-family: 'Exo 2', sans-serif;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
     opacity: 0;
     transition: opacity 0.5s ease;
     z-index: 1001;
     pointer-events: none;
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+    border: 1px solid rgba(78, 205, 196, 0.3);
+    backdrop-filter: blur(5px);
 }
 
 #skip-indicator.visible {

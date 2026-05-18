@@ -1800,8 +1800,10 @@ function animate() {
         });
     }
     
-    // Mise à jour des contrôles
-    controls.update();
+    // Mise à jour des contrôles (sauf pendant l'animation cinématique)
+    if (!cinematicAnimation || !cinematicAnimation.active) {
+        controls.update();
+    }
     
     // Mise à jour des labels
     if (showLabels) {
