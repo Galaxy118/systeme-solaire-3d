@@ -1028,8 +1028,8 @@ function startCinematicAnimation() {
         startTime,
         active: true,
         skipped: false,
-        distanceCounterShown: false,
-        distanceCounterHidden: false
+        counterShown: false,
+        counterHidden: false
     };
 
     // Create UI overlays
@@ -1066,6 +1066,25 @@ function updateCinematicAnimation() {
     camera.position.z = cinematicAnimation.startPos.z + (cinematicAnimation.endPos.z - cinematicAnimation.startPos.z) * t;
 
     camera.lookAt(0, 0, 0);
+
+    // Show distance counter after 0.5s
+    if (elapsed > 500 && !cinematicAnimation.counterShown && distanceCounter) {
+        distanceCounter.classList.add('visible');
+        cinematicAnimation.counterShown = true;
+    }
+
+    // Update distance counter
+    if (distanceCounter && cinematicAnimation.counterShown) {
+        const remainingDistance = camera.position.length();
+        const distanceInAU = Math.round(remainingDistance / 1.5);
+        distanceCounter.textContent = `${distanceInAU} UA`;
+    }
+
+    // Hide counter at 90% progress
+    if (progress > 0.9 && !cinematicAnimation.counterHidden && distanceCounter) {
+        distanceCounter.classList.remove('visible');
+        cinematicAnimation.counterHidden = true;
+    }
 
     // Very subtle warp effect (only if intensity is significant)
     if (progress > 0.2 && progress < 0.8) {
