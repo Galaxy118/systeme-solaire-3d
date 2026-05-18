@@ -1982,11 +1982,17 @@ function onMouseMove(event) {
         }
     });
 
-    const intersects = raycaster.intersectObjects(meshes);
+    const intersects = raycaster.intersectObjects(meshes, true); // Recursive
 
-    // Changer le curseur quand on survole une planète
+    // Changer le curseur quand on survole une planète ou le Soleil
     if (intersects.length > 0) {
-        document.body.style.cursor = 'pointer';
+        let object = intersects[0].object;
+        // Vérifier si c'est un objet cliquable (a des userData ou son parent en a)
+        if (object.userData.planetData || (object.parent && object.parent.userData.planetData)) {
+            document.body.style.cursor = 'pointer';
+        } else {
+            document.body.style.cursor = 'default';
+        }
     } else {
         document.body.style.cursor = 'default';
     }
@@ -2019,10 +2025,16 @@ function onMouseClick(event) {
         }
     });
 
-    const intersects = raycaster.intersectObjects(meshes);
+    const intersects = raycaster.intersectObjects(meshes, true); // Recursive pour inclure les enfants
 
     if (intersects.length > 0) {
-        const planet = intersects[0].object;
+        let planet = intersects[0].object;
+
+        // Si on clique sur un enfant (glow du Soleil), remonter au parent
+        if (!planet.userData.planetData && planet.parent && planet.parent.userData.planetData) {
+            planet = planet.parent;
+        }
+
         if (planet.userData.planetData) {
             // Afficher la fenêtre plein écran
             lockedPlanet = planet.userData.key;
