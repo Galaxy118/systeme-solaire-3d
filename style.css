@@ -773,3 +773,247 @@ body {
 .temp-planet-label.visible {
     opacity: 1;
 }
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+/* Tablettes et petits écrans (768px et moins) */
+@media screen and (max-width: 768px) {
+    /* Intro screen - texte plus petit */
+    .intro-title {
+        font-size: clamp(2rem, 8vw, 4rem);
+        letter-spacing: 8px;
+    }
+
+    .intro-subtitle {
+        font-size: clamp(0.8rem, 2.5vw, 1.2rem);
+        letter-spacing: 4px;
+    }
+
+    #start-btn {
+        font-size: 0.85rem;
+        padding: 14px 30px;
+        letter-spacing: 2px;
+    }
+
+    /* Distance counter plus petit */
+    #distance-counter {
+        font-size: 1.2rem;
+        padding: 10px 18px;
+        top: 3%;
+        right: 3%;
+        letter-spacing: 1px;
+    }
+
+    /* Skip indicator plus petit */
+    #skip-indicator {
+        font-size: 0.85rem;
+        padding: 10px 15px;
+        bottom: 3%;
+        right: 3%;
+    }
+
+    /* HUD panels - ajuster la taille */
+    .hud-panel--left .hud-panel-body {
+        width: 180px;
+        font-size: 0.85rem;
+    }
+
+    .hud-panel--right-top .hud-panel-body,
+    .hud-panel--right-bottom .hud-panel-body {
+        width: 80px;
+    }
+
+    .speed-value {
+        font-size: 1rem;
+    }
+
+    .hud-tab {
+        font-size: 0.38rem;
+    }
+
+    /* Planet selector - réduire l'espacement */
+    .planet-dot-circle {
+        width: 8px;
+        height: 8px;
+    }
+
+    .planet-dot-name {
+        font-size: 0.35rem;
+    }
+
+    /* Labels de planètes */
+    .planet-label {
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+}
+
+/* Mobile (480px et moins) */
+@media screen and (max-width: 480px) {
+    /* Intro encore plus compact */
+    .intro-title {
+        font-size: clamp(1.5rem, 10vw, 3rem);
+        letter-spacing: 5px;
+        margin-bottom: 20px;
+    }
+
+    .intro-subtitle {
+        font-size: clamp(0.7rem, 3vw, 1rem);
+        letter-spacing: 3px;
+        margin-bottom: 30px;
+    }
+
+    #start-btn {
+        font-size: 0.75rem;
+        padding: 12px 25px;
+        gap: 10px;
+    }
+
+    #start-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Overlays animation très compacts */
+    #distance-counter {
+        font-size: 1rem;
+        padding: 8px 12px;
+        top: 2%;
+        right: 2%;
+        letter-spacing: 1px;
+        border-width: 1px;
+    }
+
+    #skip-indicator {
+        font-size: 0.7rem;
+        padding: 8px 12px;
+        bottom: 2%;
+        right: 2%;
+    }
+
+    /* HUD panels - stack vertical sur mobile */
+    .hud-panel--left {
+        top: auto;
+        bottom: 80px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        transform: translateY(calc(100% - 18px));
+    }
+
+    .hud-panel--left.open {
+        transform: translateY(0);
+    }
+
+    .hud-panel--left .hud-tab {
+        order: 1;
+        width: 100%;
+        height: 18px;
+        writing-mode: horizontal-tb;
+        border-radius: 8px 8px 0 0;
+        border: 1px solid var(--planet-accent);
+        border-bottom: none;
+    }
+
+    .hud-panel--left .hud-panel-body {
+        order: 2;
+        width: 100%;
+        max-height: 200px;
+        font-size: 0.75rem;
+        padding: 10px 12px;
+    }
+
+    /* Panels droite - réduire */
+    .hud-panel--right-top,
+    .hud-panel--right-bottom {
+        right: 0;
+    }
+
+    .hud-panel--right-top .hud-panel-body {
+        width: 70px;
+        height: 70px;
+        padding: 8px 10px;
+    }
+
+    .hud-panel--right-bottom .hud-panel-body {
+        width: 70px;
+        height: 70px;
+        padding: 6px 8px;
+    }
+
+    .speed-value {
+        font-size: 0.9rem;
+    }
+
+    .speed-label {
+        font-size: 0.35rem;
+    }
+
+    .hud-toggle {
+        font-size: 0.38rem;
+        padding: 3px 6px;
+    }
+
+    /* Panel planètes - plus petit */
+    .hud-panel--bottom {
+        left: 10px;
+        right: 80px;
+    }
+
+    .planet-dot-circle {
+        width: 7px;
+        height: 7px;
+    }
+
+    .planet-dot-name {
+        font-size: 0.3rem;
+    }
+
+    /* Labels de planètes */
+    .planet-label {
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+
+    #planet-info {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+}
+
+/* Très grands écrans (1920px et plus) */
+@media screen and (min-width: 1920px) {
+    .intro-title {
+        font-size: clamp(5rem, 10vw, 8rem);
+    }
+
+    .intro-subtitle {
+        font-size: clamp(1.3rem, 3vw, 1.8rem);
+    }
+
+    #start-btn {
+        font-size: 1.1rem;
+        padding: 20px 45px;
+    }
+
+    #distance-counter {
+        font-size: 1.8rem;
+        padding: 18px 30px;
+    }
+
+    #skip-indicator {
+        font-size: 1.1rem;
+        padding: 14px 22px;
+    }
+
+    .hud-panel--left .hud-panel-body {
+        width: 220px;
+        font-size: 1rem;
+    }
+
+    .planet-label {
+        font-size: 14px;
+    }
+}
