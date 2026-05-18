@@ -2160,43 +2160,69 @@ function showPlanetInfoFullscreen(data, planetKey) {
     type.textContent = planetType;
     contentEl.appendChild(type);
 
-    // Créer les stats
-    const stats = [];
+    // Afficher toutes les informations disponibles
     if (isSun) {
-        stats.push({ label: 'Type', value: data.info.type });
-        stats.push({ label: 'Âge', value: data.info.age });
-        stats.push({ label: 'Diamètre', value: data.info.diameter });
-        stats.push({ label: 'Masse', value: data.info.masse });
-        stats.push({ label: 'Température de surface', value: data.info.temperature_surface });
-        stats.push({ label: 'Température du cœur', value: data.info.temperature_coeur });
-        stats.push({ label: 'Composition', value: data.info.composition });
-        stats.push({ label: 'Luminosité', value: data.info.luminosite });
-        stats.push({ label: 'Distance du centre galactique', value: data.info.distance_centre_galaxie });
+        // Pour le Soleil, afficher toutes les info
+        Object.keys(data.info).forEach(key => {
+            const statDiv = document.createElement('div');
+            statDiv.className = 'stat';
+
+            const label = document.createElement('span');
+            label.className = 'stat-label';
+            // Formater le label (remplacer _ par espaces, capitaliser)
+            label.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+            const value = document.createElement('span');
+            value.className = 'stat-value';
+            value.textContent = data.info[key];
+
+            statDiv.appendChild(label);
+            statDiv.appendChild(value);
+            contentEl.appendChild(statDiv);
+        });
     } else {
-        stats.push({ label: 'Type', value: data.info.type });
-        stats.push({ label: 'Diamètre', value: data.info.diametre });
-        stats.push({ label: 'Masse', value: data.info.masse });
-        stats.push({ label: 'Distance du Soleil', value: data.info.distance_soleil });
-        stats.push({ label: 'Période orbitale', value: data.info.periode_orbitale });
-        stats.push({ label: 'Période de rotation', value: Math.abs(data.rotationPeriod) + ' jours terrestres' });
+        // Pour les planètes, afficher toutes les info disponibles
+        Object.keys(data.info).forEach(key => {
+            const statDiv = document.createElement('div');
+            statDiv.className = 'stat';
+
+            const label = document.createElement('span');
+            label.className = 'stat-label';
+            // Formater le label (remplacer _ par espaces, capitaliser)
+            label.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+            const value = document.createElement('span');
+            value.className = 'stat-value';
+            value.textContent = data.info[key];
+
+            statDiv.appendChild(label);
+            statDiv.appendChild(value);
+            contentEl.appendChild(statDiv);
+        });
+
+        // Ajouter aussi les infos techniques de rotation et inclinaison
+        const technicalStats = [
+            { label: 'Inclinaison axiale', value: data.axialTilt.toFixed(2) + '°' },
+            { label: 'Période de rotation', value: Math.abs(data.rotationPeriod).toFixed(2) + ' jours' + (data.rotationPeriod < 0 ? ' (rétrograde)' : '') }
+        ];
+
+        technicalStats.forEach(stat => {
+            const statDiv = document.createElement('div');
+            statDiv.className = 'stat';
+
+            const label = document.createElement('span');
+            label.className = 'stat-label';
+            label.textContent = stat.label;
+
+            const value = document.createElement('span');
+            value.className = 'stat-value';
+            value.textContent = stat.value;
+
+            statDiv.appendChild(label);
+            statDiv.appendChild(value);
+            contentEl.appendChild(statDiv);
+        });
     }
-
-    stats.forEach(stat => {
-        const statDiv = document.createElement('div');
-        statDiv.className = 'stat';
-
-        const label = document.createElement('span');
-        label.className = 'stat-label';
-        label.textContent = stat.label;
-
-        const value = document.createElement('span');
-        value.className = 'stat-value';
-        value.textContent = stat.value;
-
-        statDiv.appendChild(label);
-        statDiv.appendChild(value);
-        contentEl.appendChild(statDiv);
-    });
 
     const hint = document.createElement('div');
     hint.className = 'lock-hint';
