@@ -891,10 +891,15 @@ function updateWarpEffect(intensity) {
 function checkAndShowPlanetLabels(cameraPosition, phase) {
     if (phase !== 2) return;
 
+    // Early exit if both labels already shown
+    const jupiterShown = planets.jupiter && planets.jupiter.labelShown;
+    const terreShown = planets.terre && planets.terre.labelShown;
+    if (jupiterShown && terreShown) return;
+
     // Afficher Jupiter si caméra passe près
-    if (planets.jupiter && planets.jupiter.mesh) {
+    if (!jupiterShown && planets.jupiter && planets.jupiter.mesh) {
         const distToJupiter = cameraPosition.distanceTo(planets.jupiter.mesh.position);
-        if (distToJupiter < 80 && !planets.jupiter.labelShown) {
+        if (distToJupiter < 80) {
             const jupiterPos = planets.jupiter.mesh.position.clone();
             jupiterPos.project(camera);
             const screenX = (jupiterPos.x * 0.5 + 0.5) * window.innerWidth;
@@ -905,9 +910,9 @@ function checkAndShowPlanetLabels(cameraPosition, phase) {
     }
 
     // Afficher Terre si caméra passe près
-    if (planets.terre && planets.terre.mesh) {
+    if (!terreShown && planets.terre && planets.terre.mesh) {
         const distToTerre = cameraPosition.distanceTo(planets.terre.mesh.position);
-        if (distToTerre < 50 && !planets.terre.labelShown) {
+        if (distToTerre < 50) {
             const terrePos = planets.terre.mesh.position.clone();
             terrePos.project(camera);
             const screenX = (terrePos.x * 0.5 + 0.5) * window.innerWidth;
@@ -1025,7 +1030,9 @@ function startCinematicAnimation() {
         duration,
         startTime,
         active: true,
-        skipped: false
+        skipped: false,
+        distanceCounterShown: false,
+        distanceCounterHidden: false
     };
 
     // Create UI overlays
@@ -1061,9 +1068,10 @@ function updateCinematicAnimation() {
 
     camera.lookAt(0, 0, 0);
 
-    // Phase 1: Show counters
-    if (phase === 1 && elapsed > 500 && distanceCounter) {
+    // Phase 1: Show counters (only once)
+    if (phase === 1 && elapsed > 500 && !cinematicAnimation.distanceCounterShown && distanceCounter) {
         distanceCounter.classList.add('visible');
+        cinematicAnimation.distanceCounterShown = true;
     }
 
     // Phase 2: Warp effect and labels
@@ -1077,14 +1085,15 @@ function updateCinematicAnimation() {
         updateWarpEffect(0);
     }
 
-    // Update distance counter
+    // Update distance counter (always, it's lightweight)
     const remainingDistance = camera.position.length();
-    const distanceInAU = remainingDistance / 1.5; // Rough AU conversion
+    const distanceInAU = remainingDistance / 1.5;
     updateDistanceCounter(Math.max(distanceInAU, 1));
 
-    // Phase 3: Hide counters
-    if (phase === 3 && phaseProgress > 0.5) {
+    // Phase 3: Hide counters (only once)
+    if (phase === 3 && phaseProgress > 0.5 && !cinematicAnimation.distanceCounterHidden) {
         hideDistanceCounter();
+        cinematicAnimation.distanceCounterHidden = true;
     }
 
     // Animation complete
