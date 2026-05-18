@@ -747,6 +747,100 @@ function init() {
     animate();
 }
 
+
+// ========================================
+// Helpers pour Animation Cinématique
+// ========================================
+
+function createSkipIndicator() {
+    const indicator = document.createElement('div');
+    indicator.id = 'skip-indicator';
+    indicator.textContent = 'Appuyez sur ESPACE ou cliquez pour passer';
+    document.body.appendChild(indicator);
+    return indicator;
+}
+
+function showSkipIndicator() {
+    if (skipIndicator) {
+        skipIndicator.classList.add('visible');
+    }
+}
+
+function hideSkipIndicator() {
+    if (skipIndicator) {
+        skipIndicator.classList.remove('visible');
+        setTimeout(() => {
+            if (skipIndicator && skipIndicator.parentNode) {
+                skipIndicator.parentNode.removeChild(skipIndicator);
+            }
+            skipIndicator = null;
+        }, 500);
+    }
+}
+
+function createDistanceCounter() {
+    const counter = document.createElement('div');
+    counter.id = 'distance-counter';
+    counter.textContent = 'Distance: 450 UA';
+    document.body.appendChild(counter);
+    return counter;
+}
+
+function updateDistanceCounter(distanceInAU) {
+    if (distanceCounter) {
+        const rounded = Math.round(distanceInAU);
+        distanceCounter.textContent = `Distance: ${rounded} UA`;
+    }
+}
+
+function hideDistanceCounter() {
+    if (distanceCounter) {
+        distanceCounter.classList.remove('visible');
+        setTimeout(() => {
+            if (distanceCounter && distanceCounter.parentNode) {
+                distanceCounter.parentNode.removeChild(distanceCounter);
+            }
+            distanceCounter = null;
+        }, 500);
+    }
+}
+
+function showPlanetLabel(planetName, screenX, screenY, duration) {
+    const label = document.createElement('div');
+    label.className = 'temp-planet-label';
+    label.textContent = planetName;
+    label.style.left = screenX + 'px';
+    label.style.top = screenY + 'px';
+    document.body.appendChild(label);
+    
+    activePlanetLabels.push(label);
+    
+    setTimeout(() => label.classList.add('visible'), 10);
+    
+    setTimeout(() => {
+        label.classList.remove('visible');
+        setTimeout(() => {
+            if (label.parentNode) {
+                label.parentNode.removeChild(label);
+            }
+            const index = activePlanetLabels.indexOf(label);
+            if (index > -1) {
+                activePlanetLabels.splice(index, 1);
+            }
+        }, 300);
+    }, duration);
+}
+
+function clearAllPlanetLabels() {
+    activePlanetLabels.forEach(label => {
+        if (label.parentNode) {
+            label.parentNode.removeChild(label);
+        }
+    });
+    activePlanetLabels = [];
+}
+
+
 // ========================================
 // Animation d'introduction
 // ========================================
