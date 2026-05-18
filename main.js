@@ -2111,12 +2111,20 @@ function setupMenu() {
         sideMenu.classList.add('open');
         menuOverlay.classList.add('active');
         menuToggle.classList.add('active');
+        // Empêcher le scroll du body sur mobile
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
     }
 
     function closeMenu() {
         sideMenu.classList.remove('open');
         menuOverlay.classList.remove('active');
         menuToggle.classList.remove('active');
+        // Réactiver le scroll du body
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
     }
 }
 

@@ -455,6 +455,9 @@ body {
     transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 90px 30px 30px 30px;
     overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     box-shadow: -10px 0 50px rgba(0,0,0,0.9);
 }
 
