@@ -1053,45 +1053,16 @@ function updateCinematicAnimation() {
     if (!cinematicAnimation || !cinematicAnimation.active) return;
 
     const elapsed = Date.now() - cinematicAnimation.startTime;
-    const { progress, phase, phaseProgress, easedProgress } = calculateCinematicProgress(elapsed);
+    const progress = Math.min(elapsed / cinematicAnimation.duration, 1);
 
-    // Update camera position
-    camera.position.x = cinematicAnimation.startPos.x +
-        (cinematicAnimation.endPos.x - cinematicAnimation.startPos.x) * easedProgress;
-    camera.position.y = cinematicAnimation.startPos.y +
-        (cinematicAnimation.endPos.y - cinematicAnimation.startPos.y) * easedProgress;
-    camera.position.z = cinematicAnimation.startPos.z +
-        (cinematicAnimation.endPos.z - cinematicAnimation.startPos.z) * easedProgress;
+    // Simple linear interpolation - no easing, no phases, just smooth movement
+    const t = progress;
+
+    camera.position.x = cinematicAnimation.startPos.x + (cinematicAnimation.endPos.x - cinematicAnimation.startPos.x) * t;
+    camera.position.y = cinematicAnimation.startPos.y + (cinematicAnimation.endPos.y - cinematicAnimation.startPos.y) * t;
+    camera.position.z = cinematicAnimation.startPos.z + (cinematicAnimation.endPos.z - cinematicAnimation.startPos.z) * t;
 
     camera.lookAt(0, 0, 0);
-
-    // Phase 1: Show counters (only once)
-    if (phase === 1 && elapsed > 500 && !cinematicAnimation.distanceCounterShown && distanceCounter) {
-        distanceCounter.classList.add('visible');
-        cinematicAnimation.distanceCounterShown = true;
-    }
-
-    // Phase 2: Warp effect only (labels disabled for performance)
-    if (phase === 2) {
-        const warpIntensity = phaseProgress < 0.5
-            ? phaseProgress * 2  // Ramp up
-            : 1 - ((phaseProgress - 0.5) * 2);  // Ramp down
-        updateWarpEffect(warpIntensity);
-        // checkAndShowPlanetLabels disabled - causes frame drops
-    } else {
-        updateWarpEffect(0);
-    }
-
-    // Update distance counter (always, it's lightweight)
-    const remainingDistance = camera.position.length();
-    const distanceInAU = remainingDistance / 1.5;
-    updateDistanceCounter(Math.max(distanceInAU, 1));
-
-    // Phase 3: Hide counters (only once)
-    if (phase === 3 && phaseProgress > 0.5 && !cinematicAnimation.distanceCounterHidden) {
-        hideDistanceCounter();
-        cinematicAnimation.distanceCounterHidden = true;
-    }
 
     // Animation complete
     if (progress >= 1) {
@@ -1100,14 +1071,7 @@ function updateCinematicAnimation() {
         controls.target.set(0, 0, 0);
         introActive = false;
         hideSkipIndicator();
-        clearAllPlanetLabels();
-        updateWarpEffect(0);
         document.querySelectorAll('.hud-panel').forEach(p => p.classList.remove('hidden'));
-
-        // Reset label flags
-        Object.values(planets).forEach(planet => {
-            if (planet.labelShown) delete planet.labelShown;
-        });
     }
 }
 
