@@ -433,17 +433,17 @@ body {
     position: fixed;
     top: 0;
     right: 0;
-    width: 280px;
+    width: 340px;
     height: 100vh;
-    background: linear-gradient(135deg, rgba(8,8,28,0.98) 0%, rgba(15,15,46,0.96) 100%);
-    backdrop-filter: blur(15px);
-    border-left: 2px solid rgba(78,205,196,0.3);
+    background: linear-gradient(180deg, rgba(10,10,30,0.98) 0%, rgba(5,5,20,0.98) 100%);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(78,205,196,0.15);
     z-index: 999;
     transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 80px 25px 25px 25px;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 90px 30px 30px 30px;
     overflow-y: auto;
-    box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+    box-shadow: -10px 0 50px rgba(0,0,0,0.8);
 }
 
 .side-menu.open {
@@ -451,23 +451,25 @@ body {
 }
 
 .side-menu-section {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 .side-menu-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 3px;
-    color: rgba(78,205,196,0.7);
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(78,205,196,0.2);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: rgba(78,205,196,0.5);
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(78,205,196,0.15);
+    text-transform: uppercase;
 }
 
 .side-menu-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(100,150,255,0.3), transparent);
-    margin: 25px 0;
+    background: linear-gradient(90deg, transparent, rgba(78,205,196,0.2), transparent);
+    margin: 40px 0;
 }
 
 /* Overlay sombre derrière le menu */
@@ -790,75 +792,108 @@ body {
 /* Contenu vitesse */
 .speed-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.55rem;
-    letter-spacing: 2px;
-    color: rgba(78,205,196,0.55);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: rgba(78,205,196,0.6);
     text-transform: uppercase;
+    margin-bottom: 20px;
+    display: block;
 }
 
 .speed-value {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
+    font-size: 3rem;
     font-weight: 700;
     color: #4ecdc4;
     line-height: 1;
     text-align: center;
     display: block;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(78,205,196,0.3);
 }
 
 .speed-btns {
     display: flex;
-    gap: 4px;
-    justify-content: center;
+    gap: 15px;
+    justify-content: stretch;
 }
 
 .speed-btns button {
-    background: rgba(78,205,196,0.12);
+    flex: 1;
+    background: linear-gradient(135deg, rgba(78,205,196,0.08) 0%, rgba(78,205,196,0.15) 100%);
     border: 1px solid rgba(78,205,196,0.3);
-    border-radius: 6px;
+    border-radius: 10px;
     color: #4ecdc4;
-    padding: 6px 14px;
+    padding: 18px 0;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem;
+    font-size: 1.2rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s ease;
-    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .speed-btns button:hover {
-    background: rgba(78,205,196,0.25);
+    background: linear-gradient(135deg, rgba(78,205,196,0.2) 0%, rgba(78,205,196,0.3) 100%);
+    border-color: rgba(78,205,196,0.6);
+    box-shadow: 0 0 25px rgba(78,205,196,0.3);
+    transform: translateY(-2px);
+}
+
+.speed-btns button:active {
+    transform: translateY(0);
 }
 
 /* Toggles options */
 .hud-toggle {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 12px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.55rem;
-    letter-spacing: 1px;
-    padding: 6px 10px;
-    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    padding: 16px 20px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     width: 100%;
-    background: rgba(68,163,255,0.07);
-    border: 1px solid rgba(68,163,255,0.18);
-    color: rgba(255,255,255,0.38);
+    background: rgba(20,20,40,0.6);
+    border: 1px solid rgba(100,150,200,0.2);
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.hud-toggle:hover {
+    background: rgba(30,30,50,0.8);
+    border-color: rgba(100,150,200,0.4);
+    transform: translateX(5px);
 }
 
 .hud-toggle.active {
-    background: rgba(78,205,196,0.18);
-    border-color: rgba(78,205,196,0.4);
+    background: linear-gradient(135deg, rgba(78,205,196,0.15) 0%, rgba(68,163,255,0.15) 100%);
+    border-color: rgba(78,205,196,0.5);
     color: #4ecdc4;
+    box-shadow: 0 0 20px rgba(78,205,196,0.2);
+}
+
+.hud-toggle.active:hover {
+    border-color: rgba(78,205,196,0.7);
 }
 
 .toggle-dot {
-    width: 6px;
-    height: 6px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: currentColor;
     flex-shrink: 0;
+    box-shadow: 0 0 10px currentColor;
+    transition: all 0.3s ease;
+}
+
+.hud-toggle:hover .toggle-dot {
+    transform: scale(1.2);
 }
 
 /* Selecteur planetes — dots */
