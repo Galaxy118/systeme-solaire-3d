@@ -1931,20 +1931,20 @@ function setupEventListeners() {
     document.getElementById('toggle-orbits').addEventListener('click', (e) => {
         showOrbits = !showOrbits;
         orbits.forEach(orbit => orbit.visible = showOrbits);
-        e.target.classList.toggle('active', showOrbits);
+        e.currentTarget.classList.toggle('active', showOrbits);
     });
     document.getElementById('toggle-orbits').classList.add('active');
-    
+
     // Toggle labels
     document.getElementById('toggle-labels').addEventListener('click', (e) => {
         showLabels = !showLabels;
         if (!showLabels) {
             document.querySelectorAll('.planet-label').forEach(el => el.remove());
         }
-        e.target.classList.toggle('active', showLabels);
+        e.currentTarget.classList.toggle('active', showLabels);
     });
     document.getElementById('toggle-labels').classList.add('active');
-    
+
     // Toggle vecteurs vitesse
     document.getElementById('toggle-velocity').addEventListener('click', (e) => {
         showVelocity = !showVelocity;
@@ -1952,7 +1952,7 @@ function setupEventListeners() {
         Object.keys(velocityArrows).forEach(key => {
             velocityArrows[key].visible = showVelocity;
         });
-        e.target.classList.toggle('active', showVelocity);
+        e.currentTarget.classList.toggle('active', showVelocity);
     });
     
     // Survol des planètes
