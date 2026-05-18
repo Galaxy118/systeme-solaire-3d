@@ -950,23 +950,81 @@ function startCameraAnimation() {
     };
 }
 
-function updateCameraAnimation() {
-    if (!cameraAnimation || !cameraAnimation.active) return;
+// DEPRECATED - Replaced by updateCinematicAnimation
+// function updateCameraAnimation() {
+//     if (!cameraAnimation || !cameraAnimation.active) return;
+//
+//     const elapsed = Date.now() - cameraAnimation.startTime;
+//     const progress = Math.min(elapsed / cameraAnimation.duration, 1);
+//     const eased = 1 - Math.pow(1 - progress, 3);
+//
+//     camera.position.x = cameraAnimation.startPos.x + (cameraAnimation.endPos.x - cameraAnimation.startPos.x) * eased;
+//     camera.position.y = cameraAnimation.startPos.y + (cameraAnimation.endPos.y - cameraAnimation.startPos.y) * eased;
+//     camera.position.z = cameraAnimation.startPos.z + (cameraAnimation.endPos.z - cameraAnimation.startPos.z) * eased;
+//
+//     const lookTarget = cameraAnimation.lookTarget || new THREE.Vector3(0, 0, 0);
+//     camera.lookAt(lookTarget);
+//
+//     if (progress >= 1) {
+//         cameraAnimation.active = false;
+//         controls.target.copy(lookTarget);
+//     }
+// }
 
-    const elapsed = Date.now() - cameraAnimation.startTime;
-    const progress = Math.min(elapsed / cameraAnimation.duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
+function updateCinematicAnimation() {
+    if (!cinematicAnimation || !cinematicAnimation.active) return;
 
-    camera.position.x = cameraAnimation.startPos.x + (cameraAnimation.endPos.x - cameraAnimation.startPos.x) * eased;
-    camera.position.y = cameraAnimation.startPos.y + (cameraAnimation.endPos.y - cameraAnimation.startPos.y) * eased;
-    camera.position.z = cameraAnimation.startPos.z + (cameraAnimation.endPos.z - cameraAnimation.startPos.z) * eased;
+    const elapsed = Date.now() - cinematicAnimation.startTime;
+    const { progress, phase, phaseProgress, easedProgress } = calculateCinematicProgress(elapsed);
 
-    const lookTarget = cameraAnimation.lookTarget || new THREE.Vector3(0, 0, 0);
-    camera.lookAt(lookTarget);
+    // Update camera position
+    camera.position.x = cinematicAnimation.startPos.x +
+        (cinematicAnimation.endPos.x - cinematicAnimation.startPos.x) * easedProgress;
+    camera.position.y = cinematicAnimation.startPos.y +
+        (cinematicAnimation.endPos.y - cinematicAnimation.startPos.y) * easedProgress;
+    camera.position.z = cinematicAnimation.startPos.z +
+        (cinematicAnimation.endPos.z - cinematicAnimation.startPos.z) * easedProgress;
 
+    camera.lookAt(0, 0, 0);
+
+    // Phase 1: Show counters
+    if (phase === 1 && elapsed > 500 && distanceCounter) {
+        distanceCounter.classList.add('visible');
+    }
+
+    // Phase 2: Warp effect and labels
+    if (phase === 2) {
+        const warpIntensity = phaseProgress < 0.5
+            ? phaseProgress * 2  // Ramp up
+            : 1 - ((phaseProgress - 0.5) * 2);  // Ramp down
+        updateWarpEffect(warpIntensity);
+        checkAndShowPlanetLabels(camera.position, phase);
+    } else {
+        updateWarpEffect(0);
+    }
+
+    // Update distance counter
+    const remainingDistance = camera.position.length();
+    const distanceInAU = remainingDistance / 1.5; // Rough AU conversion
+    updateDistanceCounter(Math.max(distanceInAU, 1));
+
+    // Phase 3: Hide counters
+    if (phase === 3 && phaseProgress > 0.5) {
+        hideDistanceCounter();
+    }
+
+    // Animation complete
     if (progress >= 1) {
-        cameraAnimation.active = false;
-        controls.target.copy(lookTarget);
+        cinematicAnimation.active = false;
+        controls.target.set(0, 0, 0);
+        hideSkipIndicator();
+        clearAllPlanetLabels();
+        updateWarpEffect(0);
+
+        // Reset label flags
+        Object.values(planets).forEach(planet => {
+            if (planet.labelShown) delete planet.labelShown;
+        });
     }
 }
 
@@ -1569,7 +1627,7 @@ function animate() {
     const elapsed = clock.getElapsedTime();
     
     // Animation de la caméra (intro)
-    updateCameraAnimation();
+    updateCinematicAnimation();
     
     // Animation des planètes
     Object.keys(planets).forEach(key => {
