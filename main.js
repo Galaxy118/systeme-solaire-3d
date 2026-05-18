@@ -924,8 +924,10 @@ function checkAndShowPlanetLabels(cameraPosition, phase) {
 // ========================================
 
 function skipCinematicAnimation() {
+    console.log('[CINEMATIC] Skip called!');
     if (!cinematicAnimation || !cinematicAnimation.active) return;
 
+    console.log('[CINEMATIC] Skipping animation');
     // Mark as skipped
     cinematicAnimation.skipped = true;
     cinematicAnimation.active = false;
@@ -1000,7 +1002,8 @@ function setupIntroAnimation() {
     // Setup skip listeners (active dès le début)
     setupSkipListeners();
 
-    startBtn.addEventListener('click', () => {
+    startBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent skip listener from catching this click
         introScreen.classList.add('fade-out');
         startCinematicAnimation();
 
@@ -1049,7 +1052,14 @@ function startCinematicAnimation() {
 }
 
 function updateCinematicAnimation() {
-    if (!cinematicAnimation || !cinematicAnimation.active) return;
+    if (!cinematicAnimation) {
+        console.log('[CINEMATIC DEBUG] No cinematicAnimation object');
+        return;
+    }
+    if (!cinematicAnimation.active) {
+        console.log('[CINEMATIC DEBUG] Animation not active');
+        return;
+    }
 
     const elapsed = Date.now() - cinematicAnimation.startTime;
     const { progress, phase, phaseProgress, easedProgress } = calculateCinematicProgress(elapsed);
