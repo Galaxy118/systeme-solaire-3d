@@ -252,6 +252,7 @@ let cinematicAnimation = null;
 let skipIndicator = null;
 let distanceCounter = null;
 let activePlanetLabels = [];
+let starParticles = []; // Cache for star particle systems
 
 const textureLoader = new THREE.TextureLoader();
 textureLoader.crossOrigin = 'anonymous';
@@ -875,17 +876,13 @@ function calculateCinematicProgress(elapsed) {
 
 function updateWarpEffect(intensity) {
     // Intensity: 0 (no warp) to 1 (max warp)
-    // Modifier la taille des particules d'étoiles pour simuler l'étirement
-    scene.children.forEach(child => {
-        if (child.type === 'Points') {
-            const material = child.material;
-            if (material.size) {
-                const baseSize = 0.5;
-                material.size = baseSize + (intensity * 0.3);
-                material.opacity = 0.8 - (intensity * 0.2);
-            }
-        }
-    });
+    // Use cached star particles instead of iterating all scene children
+    for (let i = 0; i < starParticles.length; i++) {
+        const material = starParticles[i].material;
+        const baseSize = i === 0 ? 0.5 : 0.8; // First layer base size 0.5, second 0.8
+        material.size = baseSize + (intensity * 0.3);
+        material.opacity = (i === 0 ? 0.8 : 0.9) - (intensity * 0.2);
+    }
 }
 
 function checkAndShowPlanetLabels(cameraPosition, phase) {
@@ -1139,6 +1136,7 @@ function createStarfield() {
     starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
     const stars = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(stars);
+    starParticles.push(stars); // Cache reference for warp effect
     
     // Deuxième couche d'étoiles colorées
     const starsGeometry2 = new THREE.BufferGeometry();
@@ -1177,6 +1175,7 @@ function createStarfield() {
     
     const stars2 = new THREE.Points(starsGeometry2, starsMaterial2);
     scene.add(stars2);
+    starParticles.push(stars2); // Cache reference for warp effect
 }
 
 // ========================================
