@@ -708,7 +708,7 @@ function init() {
     
     // Caméra - Position initiale très éloignée
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.set(500, 300, 500);
+    camera.position.set(0, 300, 500);
     camera.lookAt(0, 0, 0);
     
     // Renderer
