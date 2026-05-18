@@ -20,8 +20,8 @@ body {
 
 
 #planet-info {
-    font-size: 0.95rem;
-    line-height: 1.7;
+    font-size: 0.9rem;
+    line-height: 1.6;
     color: rgba(255, 255, 255, 0.85);
 }
 
@@ -38,22 +38,24 @@ body {
 #planet-info .stat {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 8px 0;
+    gap: 3px;
+    padding: 6px 0;
     border-bottom: 1px solid rgba(100, 150, 255, 0.15);
 }
 
 #planet-info .stat-label {
     color: rgba(180, 200, 230, 0.7);
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 #planet-info .stat-value {
     color: #44a3ff;
-    font-weight: 400;
-    font-size: 0.95rem;
-    padding-left: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding-left: 6px;
 }
 
 #planet-info .lock-icon {
@@ -430,8 +432,8 @@ body {
 
 .hud-panel--left .hud-panel-body {
     order: 1;
-    width: 280px;
-    padding: 18px 20px;
+    width: 240px;
+    padding: 16px 18px;
     border: 1px solid var(--planet-accent);
     border-left: none;
     border-right: none;
@@ -439,7 +441,7 @@ body {
     flex-direction: column;
     overflow-y: auto;
     max-height: 100%;
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 
 /* Panel droite haut (vitesse) */
@@ -522,7 +524,7 @@ body {
 /* Panel bas (selecteur planetes) */
 .hud-panel--bottom {
     bottom: 0;
-    left: 304px;
+    left: 264px;
     right: 154px;
     flex-direction: column;
     transform: translateY(calc(100% - 24px));
@@ -711,17 +713,17 @@ body {
 .planet-name-header {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem;
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 2px;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
 }
 
 .planet-name-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
 }
@@ -731,13 +733,13 @@ body {
 }
 
 .planet-name-type {
-    font-size: 0.6rem;
-    color: rgba(255,255,255,0.33);
-    letter-spacing: 1.5px;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 /* ==========================================
