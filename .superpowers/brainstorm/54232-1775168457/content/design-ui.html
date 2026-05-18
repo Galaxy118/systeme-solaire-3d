@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design UI — Système Solaire</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#050510; font-family:'Exo 2',sans-serif; color:#fff; min-height:100vh; }
+
+  .page { padding:24px; }
+  h1 { font-family:'Orbitron',sans-serif; font-size:1rem; letter-spacing:4px; color:#4ecdc4; text-transform:uppercase; margin-bottom:6px; }
+  .sub { color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:1px; margin-bottom:24px; }
+
+  /* ---- MOCKUP FRAME ---- */
+  .mockup-frame {
+    position:relative;
+    width:100%;
+    max-width:900px;
+    margin:0 auto;
+    aspect-ratio:16/9;
+    background:radial-gradient(ellipse at 40% 50%, #0d0d2e 0%, #020208 100%);
+    border:1px solid rgba(78,205,196,0.2);
+    border-radius:12px;
+    overflow:hidden;
+  }
+
+  /* Étoiles simulées */
+  .mockup-frame::before {
+    content:'';
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 70%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 85%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 10%, rgba(255,255,255,0.6) 0%, transparent 100%);
+  }
+
+  /* Soleil simulé */
+  .sun-sim {
+    position:absolute;
+    top:50%; left:46%;
+    transform:translate(-50%,-50%);
+    width:70px; height:70px;
+    border-radius:50%;
+    background:radial-gradient(circle at 40% 40%, #fff5aa, #FFD700 40%, #FF8C00);
+    box-shadow:0 0 40px 15px rgba(255,180,0,0.5), 0 0 80px 30px rgba(255,100,0,0.25);
+  }
+
+  /* Orbites simulées */
+  .orbit-sim {
+    position:absolute;
+    top:50%; left:46%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.12);
+  }
+
+  /* Planètes simulées */
+  .planet-sim {
+    position:absolute;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+  }
+
+  /* =====================
+     COIN HAUT-GAUCHE : Info panel
+     ===================== */
+  .hud-info {
+    position:absolute;
+    top:16px; left:16px;
+    width:210px;
+    background:linear-gradient(135deg, rgba(8,8,28,0.92) 0%, rgba(15,15,45,0.88) 100%);
+    border:1px solid rgba(74,144,217,0.5);
+    border-radius:12px;
+    padding:14px 16px;
+    backdrop-filter:blur(12px);
+    box-shadow:0 0 30px rgba(74,144,217,0.15), inset 0 0 20px rgba(74,144,217,0.03);
+  }
+  .hud-info-planet-name {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:3px;
+    color:#4A90D9;
+    margin-bottom:2px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .hud-info-planet-name .dot {
+    width:8px; height:8px;
+    border-radius:50%;
+    background:#4A90D9;
+    box-shadow:0 0 6px rgba(74,144,217,0.8);
+    flex-shrink:0;
+  }
+  .hud-info-type {
+    font-size:0.65rem;
+    color:rgba(255,255,255,0.4);
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:10px;
+    padding-bottom:8px;
+    border-bottom:1px solid rgba(74,144,217,0.2);
+  }
+  .hud-stat {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:3px 0;
+    font-size:0.68rem;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .hud-stat:last-child { border-bottom:none; }
+  .hud-stat-label { color:rgba(180,200,230,0.55); }
+  .hud-stat-value { color:#e8f0ff; font-weight:400; }
+  .hud-hint {
+    font-size:0.62rem;
+    color:rgba(150,180,220,0.4);
+    font-style:italic;
+    text-align:center;
+    padding-top:8px;
+    border-top:1px solid rgba(74,144,217,0.15);
+    margin-top:8px;
+  }
+
+  /* =====================
+     COIN HAUT-DROIT : Vitesse
+     ===================== */
+  .hud-speed {
+    position:absolute;
+    top:16px; right:16px;
+    background:linear-gradient(135deg, rgba(8,8,28,0.92) 0%, rgba(15,15,45,0.88) 100%);
+    border:1px solid rgba(78,205,196,0.3);
+    border-radius:12px;
+    padding:12px 16px;
+    backdrop-filter:blur(12px);
+    text-align:center;
+    min-width:90px;
+  }
+  .hud-speed-label {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.5rem;
+    letter-spacing:3px;
+    color:rgba(78,205,196,0.6);
+    text-transform:uppercase;
+    margin-bottom:4px;
+  }
+  .hud-speed-value {
+    font-family:'Orbitron',sans-serif;
+    font-size:1.4rem;
+    font-weight:700;
+    color:#4ecdc4;
+    line-height:1;
+    margin-bottom:8px;
+  }
+  .hud-speed-btns {
+    display:flex;
+    gap:6px;
+    justify-content:center;
+  }
+  .hud-btn-sm {
+    background:rgba(78,205,196,0.15);
+    border:1px solid rgba(78,205,196,0.35);
+    border-radius:6px;
+    color:#4ecdc4;
+    padding:3px 10px;
+    font-family:'Orbitron',sans-serif;
+    font-size:0.65rem;
+    cursor:pointer;
+  }
+
+  /* =====================
+     COIN BAS-DROIT : Toggles
+     ===================== */
+  .hud-toggles {
+    position:absolute;
+    bottom:70px; right:16px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .hud-toggle {
+    background:rgba(68,163,255,0.12);
+    border:1px solid rgba(68,163,255,0.25);
+    border-radius:8px;
+    padding:6px 12px;
+    font-family:'Orbitron',sans-serif;
+    font-size:0.55rem;
+    letter-spacing:1px;
+    color:rgba(255,255,255,0.5);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+  }
+  .hud-toggle.on {
+    background:rgba(78,205,196,0.2);
+    border-color:rgba(78,205,196,0.5);
+    color:#4ecdc4;
+  }
+  .hud-toggle-dot {
+    width:6px; height:6px;
+    border-radius:50%;
+    background:currentColor;
+  }
+
+  /* =====================
+     BAS-CENTRE : Sélecteur planètes
+     ===================== */
+  .hud-planets {
+    position:absolute;
+    bottom:16px; left:50%;
+    transform:translateX(-50%);
+    background:linear-gradient(135deg, rgba(8,8,28,0.92) 0%, rgba(15,15,45,0.88) 100%);
+    border:1px solid rgba(100,150,255,0.25);
+    border-radius:40px;
+    padding:8px 20px;
+    backdrop-filter:blur(12px);
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .planet-btn {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    cursor:pointer;
+    opacity:0.6;
+    transition:opacity 0.2s;
+  }
+  .planet-btn.active { opacity:1; }
+  .planet-btn-dot {
+    width:10px; height:10px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.2);
+  }
+  .planet-btn.active .planet-btn-dot {
+    border-color:transparent;
+    box-shadow:0 0 8px 2px currentColor;
+  }
+  .planet-btn-name {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.45rem;
+    letter-spacing:1px;
+    color:rgba(255,255,255,0.5);
+    text-transform:uppercase;
+  }
+  .planet-btn.active .planet-btn-name { color:#fff; }
+
+  /* Séparateurs labels */
+  .annotation {
+    position:absolute;
+    font-family:'Exo 2',sans-serif;
+    font-size:0.6rem;
+    letter-spacing:1px;
+    color:rgba(78,205,196,0.7);
+    background:rgba(0,0,0,0.6);
+    padding:2px 6px;
+    border-radius:4px;
+    border:1px dashed rgba(78,205,196,0.3);
+    pointer-events:none;
+    white-space:nowrap;
+  }
+
+  /* Terre sélectionnée simulée */
+  .earth-selected {
+    position:absolute;
+    top:38%; left:68%;
+    transform:translate(-50%,-50%);
+  }
+  .earth-ring {
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:28px; height:28px;
+    border-radius:50%;
+    border:1px solid rgba(74,144,217,0.6);
+    animation:pulse-ring 1.5s ease-out infinite;
+  }
+  @keyframes pulse-ring {
+    0% { transform:translate(-50%,-50%) scale(1); opacity:0.8; }
+    100% { transform:translate(-50%,-50%) scale(2.5); opacity:0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Design UI — Option C validé</h1>
+  <p class="sub">HUD en coins + sélecteur planètes en bas · Thème spatial glassmorphism</p>
+
+  <div class="mockup-frame">
+
+    <!-- Orbites simulées -->
+    <div class="orbit-sim" style="width:100px;height:100px;margin-left:-50px;margin-top:-50px;"></div>
+    <div class="orbit-sim" style="width:160px;height:160px;margin-left:-80px;margin-top:-80px;"></div>
+    <div class="orbit-sim" style="width:220px;height:220px;margin-left:-110px;margin-top:-110px;"></div>
+    <div class="orbit-sim" style="width:300px;height:300px;margin-left:-150px;margin-top:-150px;"></div>
+
+    <!-- Soleil -->
+    <div class="sun-sim"></div>
+
+    <!-- Mercure -->
+    <div class="planet-sim" style="width:5px;height:5px;background:#8C8C8C;top:38%;left:57%;"></div>
+    <!-- Vénus -->
+    <div class="planet-sim" style="width:9px;height:9px;background:#E6C87A;top:28%;left:53%;"></div>
+    <!-- Terre sélectionnée -->
+    <div class="earth-selected">
+      <div class="earth-ring"></div>
+      <div class="planet-sim" style="width:11px;height:11px;background:#4A90D9;box-shadow:0 0 8px rgba(74,144,217,0.9);position:relative;top:0;left:0;transform:none;"></div>
+    </div>
+    <!-- Mars -->
+    <div class="planet-sim" style="width:7px;height:7px;background:#C1440E;top:65%;left:62%;"></div>
+    <!-- Jupiter -->
+    <div class="planet-sim" style="width:18px;height:18px;background:#D4A574;top:55%;left:22%;"></div>
+
+    <!-- COIN HAUT-GAUCHE : Info panel -->
+    <div class="hud-info">
+      <div class="hud-info-planet-name">
+        <div class="dot"></div>
+        TERRE
+      </div>
+      <div class="hud-info-type">Planète tellurique · 🔒</div>
+      <div class="hud-stat"><span class="hud-stat-label">Diamètre</span><span class="hud-stat-value">12 742 km</span></div>
+      <div class="hud-stat"><span class="hud-stat-label">Masse</span><span class="hud-stat-value">5.972 × 10²⁴ kg</span></div>
+      <div class="hud-stat"><span class="hud-stat-label">Période orb.</span><span class="hud-stat-value">365.25 jours</span></div>
+      <div class="hud-stat"><span class="hud-stat-label">Rotation</span><span class="hud-stat-value">1 jour</span></div>
+      <div class="hud-stat"><span class="hud-stat-label">Inclinaison</span><span class="hud-stat-value">23.44°</span></div>
+      <div class="hud-stat"><span class="hud-stat-label">Gravité</span><span class="hud-stat-value">9.81 m/s²</span></div>
+      <div class="hud-hint">Cliquez à nouveau pour déverrouiller</div>
+    </div>
+    <div class="annotation" style="top:16px;left:235px;">① Infos planète · ancré top-left</div>
+
+    <!-- COIN HAUT-DROIT : Vitesse -->
+    <div class="hud-speed">
+      <div class="hud-speed-label">Vitesse</div>
+      <div class="hud-speed-value">4×</div>
+      <div class="hud-speed-btns">
+        <div class="hud-btn-sm">−</div>
+        <div class="hud-btn-sm">+</div>
+      </div>
+    </div>
+    <div class="annotation" style="top:16px;right:120px;">② Contrôle vitesse · top-right</div>
+
+    <!-- COIN BAS-DROIT : Toggles -->
+    <div class="hud-toggles">
+      <div class="hud-toggle on"><div class="hud-toggle-dot"></div>ORBITES</div>
+      <div class="hud-toggle on"><div class="hud-toggle-dot"></div>LABELS</div>
+      <div class="hud-toggle"><div class="hud-toggle-dot"></div>VITESSE →</div>
+    </div>
+    <div class="annotation" style="bottom:120px;right:120px;">③ Toggles · bottom-right</div>
+
+    <!-- BAS-CENTRE : Sélecteur planètes -->
+    <div class="hud-planets">
+      <div class="planet-btn"><div class="planet-btn-dot" style="background:#FFD700;color:#FFD700;"></div><div class="planet-btn-name">Soleil</div></div>
+      <div class="planet-btn"><div class="planet-btn-dot" style="background:#8C8C8C;color:#8C8C8C;"></div><div class="planet-btn-name">Mercure</div></div>
+      <div class="planet-btn"><div class="planet-btn-dot" style="background:#E6C87A;color:#E6C87A;"></div><div class="planet-btn-name">Vénus</div></div>
+      <div class="planet-btn active"><div class="planet-btn-dot" style="background:#4A90D9;color:#4A90D9;box-shadow:0 0 8px rgba(74,144,217,0.9);border-color:transparent;"></div><div class="planet-btn-name" style="color:#fff;">Terre</div></div>
+      <div class="planet-btn"><div class="planet-btn-dot" style="background:#C1440E;color:#C1440E;"></div><div class="planet-btn-name">Mars</div></div>
+      <div class="planet-btn"><div class="planet-btn-dot" style="background:#D4A574;color:#D4A574;"></div><div class="planet-btn-name">Jupiter</div></div>
+      <div class="planet-btn"><div class="planet-btn-dot" style="background:#EAD6A6;color:#EAD6A6;"></div><div class="planet-btn-name">Saturne</div></div>
+      <div class="planet-btn"><div class="planet-btn-dot" style="background:#7DE3F4;color:#7DE3F4;"></div><div class="planet-btn-name">Uranus</div></div>
+      <div class="planet-btn"><div class="planet-btn-dot" style="background:#4B70DD;color:#4B70DD;"></div><div class="planet-btn-name">Neptune</div></div>
+    </div>
+    <div class="annotation" style="bottom:68px;left:50%;transform:translateX(-50%);">④ Sélecteur planètes · bottom-center</div>
+
+  </div>
+
+  <div style="margin-top:16px;padding:12px 16px;background:rgba(10,10,30,0.6);border:1px solid rgba(100,150,255,0.15);border-radius:8px;font-size:0.75rem;color:rgba(200,210,230,0.7);line-height:1.6;">
+    <strong style="color:#4ecdc4;">Comportement :</strong>
+    ① Panneau info — apparaît au survol, se verrouille au clic (indicateur 🔒), couleur de l'accent change selon la planète ·
+    ② −/+ remplacent ◀◀/▶▶, plage 0.125× → 64× ·
+    ③ Toggles en colonne verticale, état actif en teal ·
+    ④ Clic sur un point → zoom caméra sur la planète + verrouillage infos · Planète active mise en évidence
+  </div>
+</div>
+
+<script>
+// Petit script pour rendre les planet-btns cliquables dans le mockup
+document.querySelectorAll('.planet-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.planet-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

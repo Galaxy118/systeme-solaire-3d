@@ -2222,9 +2222,22 @@ function resetInfoPanel() {
 // ========================================
 
 function setupPanelToggles() {
+    // Détection mobile
+    const isMobile = window.innerWidth <= 480;
+
     document.querySelectorAll('.hud-panel').forEach(panel => {
         const tab = panel.querySelector('.hud-tab');
         const closeBtn = panel.querySelector('.hud-close');
+
+        // Sur mobile, ouvrir automatiquement les panels vitesse et options
+        if (isMobile) {
+            const isSpeedPanel = panel.classList.contains('hud-panel--right-top');
+            const isOptionsPanel = panel.classList.contains('hud-panel--right-bottom');
+
+            if (isSpeedPanel || isOptionsPanel) {
+                panel.classList.add('open');
+            }
+        }
 
         tab.addEventListener('click', () => {
             panel.classList.toggle('open');
@@ -2235,6 +2248,19 @@ function setupPanelToggles() {
                 panel.classList.remove('open');
             });
         }
+    });
+
+    // Re-check à chaque resize pour adapter le comportement
+    window.addEventListener('resize', () => {
+        const isMobileNow = window.innerWidth <= 480;
+        document.querySelectorAll('.hud-panel').forEach(panel => {
+            const isSpeedPanel = panel.classList.contains('hud-panel--right-top');
+            const isOptionsPanel = panel.classList.contains('hud-panel--right-bottom');
+
+            if (isMobileNow && (isSpeedPanel || isOptionsPanel)) {
+                panel.classList.add('open');
+            }
+        });
     });
 }
 

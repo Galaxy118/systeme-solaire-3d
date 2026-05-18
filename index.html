@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système Solaire 3D</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Écran d'introduction -->
+    <div id="intro-screen">
+        <div class="intro-content">
+            <div class="stars-bg"></div>
+            <h1 class="intro-title">
+                <span class="letter">S</span><span class="letter">Y</span><span class="letter">S</span><span class="letter">T</span><span class="letter">È</span><span class="letter">M</span><span class="letter">E</span>
+                <br>
+                <span class="letter">S</span><span class="letter">O</span><span class="letter">L</span><span class="letter">A</span><span class="letter">I</span><span class="letter">R</span><span class="letter">E</span>
+            </h1>
+            <p class="intro-subtitle">Explorez l'univers en 3D</p>
+            <button id="start-btn">
+                <span>Commencer l'exploration</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="container"></div>
+
+    <!-- Panel info planete — bord gauche -->
+    <div id="panel-info" class="hud-panel hud-panel--left hidden">
+        <div class="hud-tab" id="tab-info">INFOS</div>
+        <div class="hud-panel-body">
+            <div id="planet-info">
+                <p class="hint">Survolez une planete pour plus d'infos</p>
+            </div>
+            <div class="hud-close" id="close-info">REFERMER</div>
+        </div>
+    </div>
+
+    <!-- Panel vitesse — bord droite haut -->
+    <div id="panel-speed" class="hud-panel hud-panel--right-top hidden">
+        <div class="hud-tab" id="tab-speed">VITESSE</div>
+        <div class="hud-panel-body">
+            <span class="speed-label">VITESSE</span>
+            <span id="speed-display" class="speed-value">1x</span>
+            <div class="speed-btns">
+                <button id="speed-down">-</button>
+                <button id="speed-up">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel options — bord droite bas -->
+    <div id="panel-options" class="hud-panel hud-panel--right-bottom hidden">
+        <div class="hud-tab" id="tab-options">OPTIONS</div>
+        <div class="hud-panel-body">
+            <button id="toggle-orbits" class="hud-toggle active">
+                <span class="toggle-dot"></span>ORBITES
+            </button>
+            <button id="toggle-labels" class="hud-toggle active">
+                <span class="toggle-dot"></span>LABELS
+            </button>
+            <button id="toggle-velocity" class="hud-toggle">
+                <span class="toggle-dot"></span>VITESSE
+            </button>
+        </div>
+    </div>
+
+    <!-- Panel planetes — bord bas -->
+    <div id="panel-planets" class="hud-panel hud-panel--bottom hidden">
+        <div class="hud-tab" id="tab-planets">PLANETES</div>
+        <div class="hud-panel-body" id="planet-selector"></div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
+

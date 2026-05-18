@@ -885,9 +885,9 @@ body {
     }
 }
 
-/* Mobile (480px et moins) */
+/* Mobile (480px et moins) - LAYOUT COMPLET REPENSÉ */
 @media screen and (max-width: 480px) {
-    /* Intro encore plus compact */
+    /* Intro screen compact */
     .intro-title {
         font-size: clamp(1.5rem, 10vw, 3rem);
         letter-spacing: 5px;
@@ -911,12 +911,12 @@ body {
         height: 18px;
     }
 
-    /* Overlays animation très compacts */
+    /* Overlays animation */
     #distance-counter {
         font-size: 1rem;
         padding: 8px 12px;
-        top: 2%;
-        right: 2%;
+        top: 10px;
+        right: 10px;
         letter-spacing: 1px;
         border-width: 1px;
     }
@@ -924,97 +924,181 @@ body {
     #skip-indicator {
         font-size: 0.7rem;
         padding: 8px 12px;
-        bottom: 2%;
-        right: 2%;
+        bottom: 10px;
+        right: 10px;
     }
 
-    /* HUD panels - stack vertical sur mobile */
+    /* ===== NOUVEAU LAYOUT MOBILE SIMPLIFIÉ ===== */
+
+    /* Panel INFO - En bas, tab cliquable toujours visible */
     .hud-panel--left {
-        top: auto;
-        bottom: 80px;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        transform: translateY(calc(100% - 18px));
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        flex-direction: column-reverse !important;
+        transform: translateY(calc(100% - 40px)) !important;
     }
 
     .hud-panel--left.open {
-        transform: translateY(0);
+        transform: translateY(0) !important;
     }
 
     .hud-panel--left .hud-tab {
-        order: 1;
-        width: 100%;
-        height: 18px;
-        writing-mode: horizontal-tb;
-        border-radius: 8px 8px 0 0;
-        border: 1px solid var(--planet-accent);
-        border-bottom: none;
+        order: 1 !important;
+        width: 100% !important;
+        height: 40px !important;
+        writing-mode: horizontal-tb !important;
+        border-radius: 12px 12px 0 0 !important;
+        border: 1px solid var(--planet-accent) !important;
+        border-bottom: none !important;
+        font-size: 0.65rem !important;
+        letter-spacing: 2px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: linear-gradient(0deg, rgba(8,8,28,0.98), rgba(15,15,46,0.95)) !important;
     }
 
     .hud-panel--left .hud-panel-body {
-        order: 2;
-        width: 100%;
-        max-height: 200px;
-        font-size: 0.75rem;
-        padding: 10px 12px;
+        order: 2 !important;
+        width: 100% !important;
+        max-height: 50vh !important;
+        font-size: 0.8rem !important;
+        padding: 15px !important;
+        border-left: 1px solid var(--planet-accent) !important;
+        border-right: 1px solid var(--planet-accent) !important;
+        overflow-y: auto !important;
     }
 
-    /* Panels droite - réduire */
-    .hud-panel--right-top,
-    .hud-panel--right-bottom {
-        right: 0;
+    /* Panel VITESSE et OPTIONS - En haut à droite, layout horizontal */
+    .hud-panel--right-top {
+        top: 10px !important;
+        right: 10px !important;
+        flex-direction: column !important;
+        transform: translateX(0) !important;
+    }
+
+    .hud-panel--right-top.open {
+        transform: translateX(0) !important;
+    }
+
+    .hud-panel--right-top .hud-tab {
+        display: none !important; /* Toujours ouvert sur mobile */
     }
 
     .hud-panel--right-top .hud-panel-body {
-        width: 70px;
-        height: 70px;
-        padding: 8px 10px;
-    }
-
-    .hud-panel--right-bottom .hud-panel-body {
-        width: 70px;
-        height: 70px;
-        padding: 6px 8px;
-    }
-
-    .speed-value {
-        font-size: 0.9rem;
+        width: 110px !important;
+        height: auto !important;
+        padding: 10px !important;
+        gap: 8px !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(78,205,196,0.4) !important;
     }
 
     .speed-label {
-        font-size: 0.35rem;
+        font-size: 0.45rem !important;
+        margin-bottom: 2px !important;
+    }
+
+    .speed-value {
+        font-size: 1.2rem !important;
+        margin-bottom: 6px !important;
+    }
+
+    .speed-btns {
+        gap: 5px !important;
+        width: 100% !important;
+    }
+
+    .speed-btns button {
+        padding: 6px 10px !important;
+        font-size: 0.75rem !important;
+        flex: 1 !important;
+    }
+
+    /* Panel OPTIONS - En dessous du panel vitesse */
+    .hud-panel--right-bottom {
+        top: 100px !important;
+        right: 10px !important;
+        flex-direction: column !important;
+        transform: translateX(0) !important;
+    }
+
+    .hud-panel--right-bottom.open {
+        transform: translateX(0) !important;
+    }
+
+    .hud-panel--right-bottom .hud-tab {
+        display: none !important; /* Toujours ouvert sur mobile */
+    }
+
+    .hud-panel--right-bottom .hud-panel-body {
+        width: 110px !important;
+        height: auto !important;
+        padding: 10px !important;
+        gap: 6px !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(100,150,255,0.35) !important;
     }
 
     .hud-toggle {
-        font-size: 0.38rem;
-        padding: 3px 6px;
+        font-size: 0.5rem !important;
+        padding: 6px 8px !important;
+        gap: 5px !important;
+        justify-content: flex-start !important;
     }
 
-    /* Panel planètes - plus petit */
+    .toggle-dot {
+        width: 6px !important;
+        height: 6px !important;
+    }
+
+    /* Panel PLANÈTES - CACHÉ sur mobile (trop petit) */
     .hud-panel--bottom {
-        left: 10px;
-        right: 80px;
-    }
-
-    .planet-dot-circle {
-        width: 7px;
-        height: 7px;
-    }
-
-    .planet-dot-name {
-        font-size: 0.3rem;
+        display: none !important;
     }
 
     /* Labels de planètes */
     .planet-label {
-        font-size: 9px;
-        letter-spacing: 1px;
+        font-size: 9px !important;
+        letter-spacing: 1px !important;
     }
 
     #planet-info {
-        font-size: 0.8rem;
-        line-height: 1.5;
+        font-size: 0.8rem !important;
+        line-height: 1.5 !important;
+    }
+
+    #planet-info .stat {
+        padding: 6px 0 !important;
+    }
+
+    #planet-info .stat-label {
+        font-size: 0.7rem !important;
+    }
+
+    #planet-info .stat-value {
+        font-size: 0.8rem !important;
+    }
+
+    .planet-name-header {
+        font-size: 0.9rem !important;
+    }
+
+    .planet-name-dot {
+        width: 8px !important;
+        height: 8px !important;
+    }
+
+    .planet-name-type {
+        font-size: 0.6rem !important;
+    }
+
+    .hud-close {
+        font-size: 0.55rem !important;
+        padding-top: 10px !important;
+        margin-top: 10px !important;
     }
 }
 
