@@ -842,6 +842,79 @@ function clearAllPlanetLabels() {
 
 
 // ========================================
+// Animation Cinématique - Core Logic
+// ========================================
+
+function calculateCinematicProgress(elapsed) {
+    const duration = 7000;
+    const progress = Math.min(elapsed / duration, 1);
+
+    let phase, phaseProgress, easedProgress;
+
+    if (progress < 0.286) { // Phase 1: 0-2s (2/7 = 0.286)
+        phase = 1;
+        phaseProgress = progress / 0.286;
+        easedProgress = EASING.easeInCubic(phaseProgress);
+    } else if (progress < 0.714) { // Phase 2: 2-5s (5/7 = 0.714)
+        phase = 2;
+        phaseProgress = (progress - 0.286) / 0.428;
+        easedProgress = 0.2 + (EASING.easeInOutCubic(phaseProgress) * 0.6);
+    } else { // Phase 3: 5-7s
+        phase = 3;
+        phaseProgress = (progress - 0.714) / 0.286;
+        easedProgress = 0.8 + (EASING.easeOutCubic(phaseProgress) * 0.2);
+    }
+
+    return { progress, phase, phaseProgress, easedProgress };
+}
+
+function updateWarpEffect(intensity) {
+    // Intensity: 0 (no warp) to 1 (max warp)
+    // Modifier la taille des particules d'étoiles pour simuler l'étirement
+    scene.children.forEach(child => {
+        if (child.type === 'Points') {
+            const material = child.material;
+            if (material.size) {
+                const baseSize = 0.5;
+                material.size = baseSize + (intensity * 0.3);
+                material.opacity = 0.8 - (intensity * 0.2);
+            }
+        }
+    });
+}
+
+function checkAndShowPlanetLabels(cameraPosition, phase) {
+    if (phase !== 2) return;
+
+    // Afficher Jupiter si caméra passe près
+    if (planets.jupiter && planets.jupiter.mesh) {
+        const distToJupiter = cameraPosition.distanceTo(planets.jupiter.mesh.position);
+        if (distToJupiter < 80 && !planets.jupiter.labelShown) {
+            const jupiterPos = planets.jupiter.mesh.position.clone();
+            jupiterPos.project(camera);
+            const screenX = (jupiterPos.x * 0.5 + 0.5) * window.innerWidth;
+            const screenY = (-(jupiterPos.y * 0.5) + 0.5) * window.innerHeight - 30;
+            showPlanetLabel('Jupiter', screenX, screenY, 1600);
+            planets.jupiter.labelShown = true;
+        }
+    }
+
+    // Afficher Terre si caméra passe près
+    if (planets.terre && planets.terre.mesh) {
+        const distToTerre = cameraPosition.distanceTo(planets.terre.mesh.position);
+        if (distToTerre < 50 && !planets.terre.labelShown) {
+            const terrePos = planets.terre.mesh.position.clone();
+            terrePos.project(camera);
+            const screenX = (terrePos.x * 0.5 + 0.5) * window.innerWidth;
+            const screenY = (-(terrePos.y * 0.5) + 0.5) * window.innerHeight - 30;
+            showPlanetLabel('Terre', screenX, screenY, 1600);
+            planets.terre.labelShown = true;
+        }
+    }
+}
+
+
+// ========================================
 // Animation d'introduction
 // ========================================
 
