@@ -956,7 +956,12 @@ function skipCinematicAnimation() {
             controls.enabled = true;
             controls.target.set(0, 0, 0);
             introActive = false;
-            document.querySelectorAll('.hud-panel').forEach(p => p.classList.remove('hidden'));
+
+            // Faire apparaître le bouton menu burger
+            const menuToggle = document.getElementById('menu-toggle');
+            if (menuToggle) {
+                menuToggle.classList.add('visible');
+            }
         }
     }
 
@@ -1120,7 +1125,12 @@ function updateCinematicAnimation() {
         controls.target.set(0, 0, 0);
         introActive = false;
         hideSkipIndicator();
-        document.querySelectorAll('.hud-panel').forEach(p => p.classList.remove('hidden'));
+
+        // Faire apparaître le bouton menu burger
+        const menuToggle = document.getElementById('menu-toggle');
+        if (menuToggle) {
+            menuToggle.classList.add('visible');
+        }
 
         // Reset star particles
         if (starParticles[0]) {
