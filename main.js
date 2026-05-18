@@ -1071,13 +1071,13 @@ function updateCinematicAnimation() {
         cinematicAnimation.distanceCounterShown = true;
     }
 
-    // Phase 2: Warp effect and labels
+    // Phase 2: Warp effect only (labels disabled for performance)
     if (phase === 2) {
         const warpIntensity = phaseProgress < 0.5
             ? phaseProgress * 2  // Ramp up
             : 1 - ((phaseProgress - 0.5) * 2);  // Ramp down
         updateWarpEffect(warpIntensity);
-        checkAndShowPlanetLabels(camera.position, phase);
+        // checkAndShowPlanetLabels disabled - causes frame drops
     } else {
         updateWarpEffect(0);
     }
