@@ -924,10 +924,8 @@ function checkAndShowPlanetLabels(cameraPosition, phase) {
 // ========================================
 
 function skipCinematicAnimation() {
-    console.log('[CINEMATIC] Skip called!');
     if (!cinematicAnimation || !cinematicAnimation.active) return;
 
-    console.log('[CINEMATIC] Skipping animation');
     // Mark as skipped
     cinematicAnimation.skipped = true;
     cinematicAnimation.active = false;
@@ -1021,8 +1019,6 @@ function startCinematicAnimation() {
     const duration = 7000;
     const startTime = Date.now();
 
-    console.log('[CINEMATIC] Starting animation from', startPos, 'to', endPos);
-
     cinematicAnimation = {
         startPos,
         endPos,
@@ -1035,8 +1031,6 @@ function startCinematicAnimation() {
     // Create UI overlays
     skipIndicator = createSkipIndicator();
     distanceCounter = createDistanceCounter();
-
-    console.log('[CINEMATIC] Animation active:', cinematicAnimation.active);
 
     // Show skip indicator after 1s
     setTimeout(() => {
@@ -1052,22 +1046,10 @@ function startCinematicAnimation() {
 }
 
 function updateCinematicAnimation() {
-    if (!cinematicAnimation) {
-        console.log('[CINEMATIC DEBUG] No cinematicAnimation object');
-        return;
-    }
-    if (!cinematicAnimation.active) {
-        console.log('[CINEMATIC DEBUG] Animation not active');
-        return;
-    }
+    if (!cinematicAnimation || !cinematicAnimation.active) return;
 
     const elapsed = Date.now() - cinematicAnimation.startTime;
     const { progress, phase, phaseProgress, easedProgress } = calculateCinematicProgress(elapsed);
-
-    // Debug every second
-    if (Math.floor(elapsed / 1000) !== Math.floor((elapsed - 16) / 1000)) {
-        console.log(`[CINEMATIC] t=${(elapsed/1000).toFixed(1)}s phase=${phase} eased=${easedProgress.toFixed(3)} pos=(${camera.position.x.toFixed(0)}, ${camera.position.y.toFixed(0)}, ${camera.position.z.toFixed(0)})`);
-    }
 
     // Update camera position
     camera.position.x = cinematicAnimation.startPos.x +
