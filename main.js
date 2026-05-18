@@ -989,6 +989,7 @@ function setupSkipListeners() {
 // ========================================
 
 function setupIntroAnimation() {
+    setupSkipListeners();
     const startBtn = document.getElementById('start-btn');
     const introScreen = document.getElementById('intro-screen');
 
