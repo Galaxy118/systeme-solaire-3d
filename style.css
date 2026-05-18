@@ -864,6 +864,47 @@ body {
 }
 
 /* Contenu vitesse */
+/* Bouton Pause */
+.pause-button {
+    width: 100%;
+    padding: 20px;
+    background: rgba(45, 156, 219, 0.12);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 4px;
+    color: var(--color-accent-secondary);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.pause-button:hover {
+    background: rgba(45, 156, 219, 0.2);
+    border-color: var(--color-accent-secondary);
+    box-shadow: 0 4px 12px rgba(45, 156, 219, 0.3);
+    transform: translateY(-2px);
+}
+
+.pause-button.paused {
+    background: rgba(86, 204, 242, 0.15);
+    border-color: var(--color-accent-secondary);
+}
+
+.pause-button .pause-icon {
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+}
+
+.pause-button:hover .pause-icon {
+    transform: scale(1.1);
+}
+
 .speed-label {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.7rem;

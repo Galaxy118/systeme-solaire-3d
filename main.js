@@ -238,6 +238,7 @@ let planets = {};
 let orbits = [];
 let clock = new THREE.Clock();
 let speedMultiplier = 1;
+let isPaused = false;
 let showOrbits = true;
 let showLabels = true;
 let raycaster = new THREE.Raycaster();
@@ -1741,15 +1742,16 @@ function createAmbientLight() {
 
 function animate() {
     requestAnimationFrame(animate);
-    
-    const delta = clock.getDelta();
+
+    const delta = isPaused ? 0 : clock.getDelta();
     const elapsed = clock.getElapsedTime();
-    
+
     // Animation de la caméra (intro)
     updateCinematicAnimation();
-    
-    // Animation des planètes
-    Object.keys(planets).forEach(key => {
+
+    // Animation des planètes (seulement si pas en pause)
+    if (!isPaused) {
+        Object.keys(planets).forEach(key => {
         if (key === 'soleil') {
             // Rotation du soleil sur son axe
             const sunData = planets.soleil.data;
@@ -1806,17 +1808,18 @@ function animate() {
         const rotationDirection = data.rotationPeriod < 0 ? -1 : 1;
         const rotationSpeed = (2 * Math.PI) / (Math.abs(data.rotationPeriod) * 4);
         planet.mesh.rotation.y += delta * rotationSpeed * speedMultiplier * rotationDirection;
-    });
-    
-    // Animation de la ceinture d'astéroïdes
-    if (window.asteroidBelt) {
+        });
+    }
+
+    // Animation de la ceinture d'astéroïdes (seulement si pas en pause)
+    if (!isPaused && window.asteroidBelt) {
         window.asteroidBelt.children.forEach(asteroid => {
             const data = asteroid.userData;
-            
+
             // Rotation sur lui-même
             asteroid.rotation.x += data.rotationSpeed;
             asteroid.rotation.y += data.rotationSpeed * 0.7;
-            
+
             // Mouvement orbital
             data.angle += data.orbitalSpeed * speedMultiplier;
             asteroid.position.x = data.distance * Math.cos(data.angle);
@@ -1894,6 +1897,25 @@ function setupEventListeners() {
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
     
+    // Toggle pause
+    document.getElementById('toggle-pause').addEventListener('click', (e) => {
+        isPaused = !isPaused;
+        const button = e.currentTarget;
+        const icon = button.querySelector('.pause-icon');
+        const text = button.querySelector('.pause-text');
+
+        if (isPaused) {
+            button.classList.add('paused');
+            icon.textContent = '▶';
+            text.textContent = 'Reprendre';
+        } else {
+            button.classList.remove('paused');
+            icon.textContent = '⏸';
+            text.textContent = 'Mettre en pause';
+        }
+    });
+
+
     // Contrôles de vitesse
     document.getElementById('speed-up').addEventListener('click', () => {
         speedMultiplier = Math.min(speedMultiplier * 2, 64);
