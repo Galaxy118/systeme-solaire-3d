@@ -31,34 +31,29 @@
 
     <div id="container"></div>
 
-    <!-- Panel info planete — bord gauche -->
-    <div id="panel-info" class="hud-panel hud-panel--left hidden">
-        <div class="hud-tab" id="tab-info">INFOS</div>
-        <div class="hud-panel-body">
-            <div id="planet-info">
-                <p class="hint">Survolez une planete pour plus d'infos</p>
-            </div>
-            <div class="hud-close" id="close-info">REFERMER</div>
-        </div>
-    </div>
+    <!-- Bouton menu (3 tirets) -->
+    <button id="menu-toggle" class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
-    <!-- Panel vitesse — bord droite haut -->
-    <div id="panel-speed" class="hud-panel hud-panel--right-top hidden">
-        <div class="hud-tab" id="tab-speed">VITESSE</div>
-        <div class="hud-panel-body">
-            <span class="speed-label">VITESSE</span>
-            <span id="speed-display" class="speed-value">1x</span>
+    <!-- Menu latéral (Vitesse + Options) -->
+    <div id="side-menu" class="side-menu">
+        <div class="side-menu-section">
+            <h3 class="side-menu-title">VITESSE</h3>
+            <span class="speed-label">Multiplicateur</span>
+            <span id="speed-display" class="speed-value">1×</span>
             <div class="speed-btns">
                 <button id="speed-down">-</button>
                 <button id="speed-up">+</button>
             </div>
         </div>
-    </div>
 
-    <!-- Panel options — bord droite bas -->
-    <div id="panel-options" class="hud-panel hud-panel--right-bottom hidden">
-        <div class="hud-tab" id="tab-options">OPTIONS</div>
-        <div class="hud-panel-body">
+        <div class="side-menu-divider"></div>
+
+        <div class="side-menu-section">
+            <h3 class="side-menu-title">OPTIONS</h3>
             <button id="toggle-orbits" class="hud-toggle active">
                 <span class="toggle-dot"></span>ORBITES
             </button>
@@ -71,10 +66,15 @@
         </div>
     </div>
 
-    <!-- Panel planetes — bord bas -->
-    <div id="panel-planets" class="hud-panel hud-panel--bottom hidden">
-        <div class="hud-tab" id="tab-planets">PLANETES</div>
-        <div class="hud-panel-body" id="planet-selector"></div>
+    <!-- Overlay pour fermer le menu quand on clique à côté -->
+    <div id="menu-overlay" class="menu-overlay"></div>
+
+    <!-- Fenêtre plein écran info planète -->
+    <div id="planet-info-fullscreen" class="planet-info-fullscreen">
+        <button id="close-planet-info" class="close-planet-info">✕</button>
+        <div id="planet-info-content" class="planet-info-content">
+            <!-- Contenu dynamique -->
+        </div>
     </div>
 
     <script type="importmap">

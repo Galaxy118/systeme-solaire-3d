@@ -738,10 +738,11 @@ function init() {
     createVelocityArrows();
     buildPlanetSelector();
     createAmbientLight();
-    
+
     // Event listeners
     setupEventListeners();
-    setupPanelToggles();
+    setupMenu();
+    setupPlanetInfoFullscreen();
     setupIntroAnimation();
     
     // Démarrer l'animation
@@ -1933,15 +1934,13 @@ function setupEventListeners() {
 // ========================================
 
 function onMouseMove(event) {
+    // Survol désactivé - on affiche les infos uniquement au clic
+    // Le curseur peut changer pour indiquer qu'on peut cliquer
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    
-    // Si une planète est verrouillée, ne pas changer les infos au survol
-    if (lockedPlanet) return;
-    
+
     raycaster.setFromCamera(mouse, camera);
-    
-    // Collecter tous les meshes (y compris le Soleil)
+
     const meshes = [];
     Object.keys(planets).forEach(key => {
         if (key === 'lune') return;
@@ -1949,19 +1948,14 @@ function onMouseMove(event) {
             meshes.push(planets[key].mesh);
         }
     });
-    
+
     const intersects = raycaster.intersectObjects(meshes);
-    
+
+    // Changer le curseur quand on survole une planète
     if (intersects.length > 0) {
-        const planet = intersects[0].object;
-        if (planet.userData.planetData && hoveredPlanet !== planet.userData.key) {
-            hoveredPlanet = planet.userData.key;
-            updateInfoPanel(planet.userData.planetData, planet.userData.key === 'soleil');
-            updateSelectorActive(planet.userData.key);
-        }
-    } else if (hoveredPlanet) {
-        hoveredPlanet = null;
-        resetInfoPanel();
+        document.body.style.cursor = 'pointer';
+    } else {
+        document.body.style.cursor = 'default';
     }
 }
 
@@ -1972,15 +1966,17 @@ function onMouseMove(event) {
 function onMouseClick(event) {
     // Ignorer si l'intro est active
     if (introActive) return;
-    
-    // Ignorer les clics sur les boutons UI
-    if (event.target.tagName === 'BUTTON') return;
-    
+
+    // Ignorer les clics sur les boutons UI et éléments interactifs
+    if (event.target.tagName === 'BUTTON' || event.target.closest('.side-menu, .menu-toggle, .planet-info-fullscreen')) {
+        return;
+    }
+
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    
+
     raycaster.setFromCamera(mouse, camera);
-    
+
     // Collecter tous les meshes (y compris le Soleil)
     const meshes = [];
     Object.keys(planets).forEach(key => {
@@ -1989,31 +1985,16 @@ function onMouseClick(event) {
             meshes.push(planets[key].mesh);
         }
     });
-    
+
     const intersects = raycaster.intersectObjects(meshes);
-    
+
     if (intersects.length > 0) {
         const planet = intersects[0].object;
         if (planet.userData.planetData) {
-            // Si on clique sur la même planète déjà verrouillée, on déverrouille
-            if (lockedPlanet === planet.userData.key) {
-                lockedPlanet = null;
-                updateInfoPanel(planet.userData.planetData, false);
-                updateSelectorActive('');
-            } else {
-                // Verrouiller sur cette planète
-                lockedPlanet = planet.userData.key;
-                hoveredPlanet = planet.userData.key;
-                updateInfoPanel(planet.userData.planetData, true);
-                updateSelectorActive(planet.userData.key);
-            }
-        }
-    } else {
-        // Clic dans le vide : déverrouiller
-        if (lockedPlanet) {
-            lockedPlanet = null;
-            hoveredPlanet = null;
-            resetInfoPanel();
+            // Afficher la fenêtre plein écran
+            lockedPlanet = planet.userData.key;
+            hoveredPlanet = planet.userData.key;
+            showPlanetInfoFullscreen(planet.userData.planetData, planet.userData.key);
         }
     }
 }
@@ -2023,96 +2004,7 @@ function onMouseClick(event) {
 // ========================================
 
 function updateInfoPanel(data, isLocked = false) {
-    const panelEl = document.getElementById('panel-info');
-    const infoEl  = document.getElementById('planet-info');
-    if (!infoEl) return;
-
-    // Couleur accent dynamique selon la planete
-    const hexColor = '#' + data.color.toString(16).padStart(6, '0');
-    if (panelEl) {
-        panelEl.style.setProperty('--planet-accent', hexColor + '99');
-    }
-
-    // Vider le contenu existant
-    while (infoEl.firstChild) infoEl.removeChild(infoEl.firstChild);
-
-    // En-tete : point colore + nom + icone verrou
-    const header = document.createElement('div');
-    header.className = 'planet-name-header';
-
-    const dot = document.createElement('div');
-    dot.className = 'planet-name-dot';
-    dot.style.background = hexColor;
-    dot.style.boxShadow = '0 0 6px ' + hexColor + 'aa';
-    header.appendChild(dot);
-
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'planet-name-text';
-    nameSpan.textContent = data.name;
-    header.appendChild(nameSpan);
-
-    if (isLocked) {
-        const lockSpan = document.createElement('span');
-        lockSpan.className = 'lock-icon';
-        lockSpan.textContent = ' \uD83D\uDD12';
-        header.appendChild(lockSpan);
-    }
-
-    infoEl.appendChild(header);
-
-    // Sous-titre type
-    const typeEl = document.createElement('div');
-    typeEl.className = 'planet-name-type';
-    typeEl.textContent = data.info.type || '';
-    infoEl.appendChild(typeEl);
-
-    // Stats rotation et inclinaison
-    const rotPeriod = Math.abs(data.rotationPeriod);
-    const rotDirection = data.rotationPeriod < 0 ? ' (retrograde)' : '';
-    const rotValue = rotPeriod < 1
-        ? (rotPeriod * 24).toFixed(1) + 'h'
-        : rotPeriod.toFixed(2) + ' jours';
-
-    [
-        { label: 'Inclinaison axiale', value: data.axialTilt.toFixed(2) + '\u00B0' },
-        { label: 'Rotation', value: rotValue + rotDirection }
-    ].forEach(s => {
-        const row = document.createElement('div');
-        row.className = 'stat';
-        const lbl = document.createElement('span');
-        lbl.className = 'stat-label';
-        lbl.textContent = s.label;
-        const val = document.createElement('span');
-        val.className = 'stat-value';
-        val.textContent = s.value;
-        row.appendChild(lbl);
-        row.appendChild(val);
-        infoEl.appendChild(row);
-    });
-
-    // Reste des infos (filtrer 'type' deja affiche)
-    Object.keys(data.info).forEach(key => {
-        if (key === 'type') return;
-        const row = document.createElement('div');
-        row.className = 'stat';
-        const lbl = document.createElement('span');
-        lbl.className = 'stat-label';
-        lbl.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        const val = document.createElement('span');
-        val.className = 'stat-value';
-        val.textContent = data.info[key];
-        row.appendChild(lbl);
-        row.appendChild(val);
-        infoEl.appendChild(row);
-    });
-
-    // Hint deverrouillage
-    if (isLocked) {
-        const hint = document.createElement('p');
-        hint.className = 'lock-hint';
-        hint.textContent = 'Cliquez a nouveau pour deverrouiller';
-        infoEl.appendChild(hint);
-    }
+    // Fonction d\u00E9sactiv\u00E9e - on utilise maintenant showPlanetInfoFullscreen
 }
 
 // ========================================
@@ -2132,136 +2024,148 @@ const PLANET_COLORS_HEX = {
 };
 
 function buildPlanetSelector() {
-    const container = document.getElementById('planet-selector');
-    if (!container) return;
-
-    Object.keys(PLANET_COLORS_HEX).forEach(key => {
-        const data = PLANETS_DATA[key];
-        if (!data) return;
-
-        const btn = document.createElement('button');
-        btn.className = 'planet-dot';
-        btn.dataset.key = key;
-        btn.style.setProperty('--planet-color', PLANET_COLORS_HEX[key]);
-
-        const circle = document.createElement('div');
-        circle.className = 'planet-dot-circle';
-        circle.style.background = PLANET_COLORS_HEX[key];
-        btn.appendChild(circle);
-
-        const name = document.createElement('span');
-        name.className = 'planet-dot-name';
-        name.textContent = data.name;
-        btn.appendChild(name);
-
-        btn.addEventListener('click', () => focusPlanet(key));
-        container.appendChild(btn);
-    });
+    // Fonction désactivée - le sélecteur de planètes n'est plus utilisé
 }
 
 function focusPlanet(key) {
-    const planetObj = planets[key];
-    if (!planetObj) return;
-
-    const worldPos = new THREE.Vector3();
-    if (key === 'soleil') {
-        worldPos.set(0, 0, 0);
-    } else {
-        planetObj.axialPivot.getWorldPosition(worldPos);
-    }
-
-    const radius = planetObj.data ? planetObj.data.radius : 8;
-    const dist = radius * 8 + 20;
-
-    cameraAnimation = {
-        startPos: { x: camera.position.x, y: camera.position.y, z: camera.position.z },
-        endPos: {
-            x: worldPos.x + dist * 0.7,
-            y: worldPos.y + dist * 0.4,
-            z: worldPos.z + dist * 0.7
-        },
-        duration: 2000,
-        startTime: Date.now(),
-        active: true,
-        lookTarget: worldPos.clone()
-    };
-
-    lockedPlanet = key;
-    hoveredPlanet = key;
-    updateInfoPanel(planetObj.data, true);
-    updateSelectorActive(key);
-
-    const panelInfo = document.getElementById('panel-info');
-    if (panelInfo) panelInfo.classList.add('open');
+    // Fonction désactivée
 }
 
 function updateSelectorActive(key) {
-    document.querySelectorAll('.planet-dot').forEach(d => d.classList.remove('active'));
-    if (!key) return;
-    const dot = document.querySelector('.planet-dot[data-key="' + key + '"]');
-    if (dot) dot.classList.add('active');
+    // Fonction désactivée
 }
 
 function resetInfoPanel() {
-    const infoEl = document.getElementById('planet-info');
-    if (!infoEl) return;
-    while (infoEl.firstChild) infoEl.removeChild(infoEl.firstChild);
-    const hint = document.createElement('p');
-    hint.className = 'hint';
-    hint.textContent = "Survolez une planete pour plus d'infos";
-    infoEl.appendChild(hint);
-
-    const panelEl = document.getElementById('panel-info');
-    if (panelEl) panelEl.style.setProperty('--planet-accent', 'rgba(74,144,217,0.5)');
-
-    updateSelectorActive('');
+    // Fonction désactivée - on utilise maintenant la fenêtre plein écran
 }
 
 // ========================================
-// Toggle des panneaux HUD
+// Menu latéral (3 tirets)
+// ========================================
+
+function setupMenu() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const sideMenu = document.getElementById('side-menu');
+    const menuOverlay = document.getElementById('menu-overlay');
+
+    // Ouvrir/fermer le menu
+    menuToggle.addEventListener('click', () => {
+        const isOpen = sideMenu.classList.contains('open');
+
+        if (isOpen) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    // Fermer avec l'overlay
+    menuOverlay.addEventListener('click', closeMenu);
+
+    function openMenu() {
+        sideMenu.classList.add('open');
+        menuOverlay.classList.add('active');
+        menuToggle.classList.add('active');
+    }
+
+    function closeMenu() {
+        sideMenu.classList.remove('open');
+        menuOverlay.classList.remove('active');
+        menuToggle.classList.remove('active');
+    }
+}
+
+// ========================================
+// Fenêtre plein écran info planète
+// ========================================
+
+function setupPlanetInfoFullscreen() {
+    const fullscreenEl = document.getElementById('planet-info-fullscreen');
+    const closeBtn = document.getElementById('close-planet-info');
+
+    closeBtn.addEventListener('click', () => {
+        closePlanetInfo();
+    });
+
+    // Fermer avec Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && fullscreenEl.classList.contains('visible')) {
+            closePlanetInfo();
+        }
+    });
+}
+
+function showPlanetInfoFullscreen(data, planetKey) {
+    const contentEl = document.getElementById('planet-info-content');
+
+    // Vider le contenu
+    contentEl.textContent = '';
+
+    // Créer les éléments DOM de manière sécurisée
+    const isSun = planetKey === 'soleil';
+    const planetName = isSun ? 'Le Soleil' : data.name;
+    const planetType = isSun ? 'Étoile' : (data.type || 'Planète');
+
+    const title = document.createElement('h2');
+    title.textContent = planetName;
+    contentEl.appendChild(title);
+
+    const type = document.createElement('div');
+    type.className = 'planet-type';
+    type.textContent = planetType;
+    contentEl.appendChild(type);
+
+    // Créer les stats
+    const stats = [];
+    if (isSun) {
+        stats.push({ label: 'Rayon', value: '696 000 km' });
+        stats.push({ label: 'Masse', value: '1,989 × 10³⁰ kg' });
+        stats.push({ label: 'Température de surface', value: '5 505 °C' });
+        stats.push({ label: 'Composition', value: 'Hydrogène (73%), Hélium (25%)' });
+    } else {
+        stats.push({ label: 'Rayon', value: data.radius + ' km' });
+        stats.push({ label: 'Distance du Soleil', value: data.distance + ' millions de km' });
+        stats.push({ label: 'Période orbitale', value: data.orbitalPeriod + ' jours terrestres' });
+        stats.push({ label: 'Période de rotation', value: Math.abs(data.rotationPeriod) + ' jours terrestres' });
+    }
+
+    stats.forEach(stat => {
+        const statDiv = document.createElement('div');
+        statDiv.className = 'stat';
+
+        const label = document.createElement('span');
+        label.className = 'stat-label';
+        label.textContent = stat.label;
+
+        const value = document.createElement('span');
+        value.className = 'stat-value';
+        value.textContent = stat.value;
+
+        statDiv.appendChild(label);
+        statDiv.appendChild(value);
+        contentEl.appendChild(statDiv);
+    });
+
+    const hint = document.createElement('div');
+    hint.className = 'lock-hint';
+    hint.textContent = '💡 Cliquez sur une autre planète pour afficher ses informations';
+    contentEl.appendChild(hint);
+
+    document.getElementById('planet-info-fullscreen').classList.add('visible');
+}
+
+function closePlanetInfo() {
+    const fullscreenEl = document.getElementById('planet-info-fullscreen');
+    fullscreenEl.classList.remove('visible');
+    lockedPlanet = null;
+}
+
+// ========================================
+// Toggle des panneaux HUD (DÉSACTIVÉ)
 // ========================================
 
 function setupPanelToggles() {
-    // Détection mobile
-    const isMobile = window.innerWidth <= 480;
-
-    document.querySelectorAll('.hud-panel').forEach(panel => {
-        const tab = panel.querySelector('.hud-tab');
-        const closeBtn = panel.querySelector('.hud-close');
-
-        // Sur mobile, ouvrir automatiquement les panels vitesse et options
-        if (isMobile) {
-            const isSpeedPanel = panel.classList.contains('hud-panel--right-top');
-            const isOptionsPanel = panel.classList.contains('hud-panel--right-bottom');
-
-            if (isSpeedPanel || isOptionsPanel) {
-                panel.classList.add('open');
-            }
-        }
-
-        tab.addEventListener('click', () => {
-            panel.classList.toggle('open');
-        });
-
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                panel.classList.remove('open');
-            });
-        }
-    });
-
-    // Re-check à chaque resize pour adapter le comportement
-    window.addEventListener('resize', () => {
-        const isMobileNow = window.innerWidth <= 480;
-        document.querySelectorAll('.hud-panel').forEach(panel => {
-            const isSpeedPanel = panel.classList.contains('hud-panel--right-top');
-            const isOptionsPanel = panel.classList.contains('hud-panel--right-bottom');
-
-            if (isMobileNow && (isSpeedPanel || isOptionsPanel)) {
-                panel.classList.add('open');
-            }
-        });
-    });
+    // Fonction désactivée - les anciens panels sont cachés
 }
 
 // ========================================

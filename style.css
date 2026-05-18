@@ -367,18 +367,239 @@ body {
 }
 
 /* ==========================================
-   HUD PANELS — panneaux retractables
+   MENU BURGER (3 tirets)
+   ========================================== */
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(8,8,28,0.95) 0%, rgba(15,15,46,0.92) 100%);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(78,205,196,0.4);
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background: linear-gradient(135deg, rgba(8,8,28,1) 0%, rgba(15,15,46,0.98) 100%);
+    border-color: rgba(78,205,196,0.6);
+    box-shadow: 0 0 20px rgba(78,205,196,0.3);
+}
+
+.menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 3px;
+    background: rgba(78,205,196,0.9);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+}
+
+/* ==========================================
+   MENU LATÉRAL (Vitesse + Options)
+   ========================================== */
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(8,8,28,0.98) 0%, rgba(15,15,46,0.96) 100%);
+    backdrop-filter: blur(15px);
+    border-left: 2px solid rgba(78,205,196,0.3);
+    z-index: 999;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 80px 25px 25px 25px;
+    overflow-y: auto;
+    box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+}
+
+.side-menu.open {
+    transform: translateX(0);
+}
+
+.side-menu-section {
+    margin-bottom: 30px;
+}
+
+.side-menu-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: rgba(78,205,196,0.7);
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(78,205,196,0.2);
+}
+
+.side-menu-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(100,150,255,0.3), transparent);
+    margin: 25px 0;
+}
+
+/* Overlay sombre derrière le menu */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ==========================================
+   FENÊTRE PLEIN ÉCRAN INFO PLANÈTE
+   ========================================== */
+
+.planet-info-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(8,8,28,0.98) 0%, rgba(15,15,46,0.96) 100%);
+    backdrop-filter: blur(20px);
+    z-index: 1100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.planet-info-fullscreen.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.close-planet-info {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(255,80,80,0.2) 0%, rgba(200,50,50,0.2) 100%);
+    border: 2px solid rgba(255,80,80,0.5);
+    border-radius: 10px;
+    color: rgba(255,100,100,0.9);
+    font-size: 1.8rem;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1101;
+}
+
+.close-planet-info:hover {
+    background: linear-gradient(135deg, rgba(255,80,80,0.4) 0%, rgba(200,50,50,0.4) 100%);
+    border-color: rgba(255,80,80,0.8);
+    box-shadow: 0 0 20px rgba(255,80,80,0.4);
+    transform: rotate(90deg);
+}
+
+.planet-info-content {
+    max-width: 800px;
+    width: 100%;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Exo 2', sans-serif;
+}
+
+.planet-info-content h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    color: #4ecdc4;
+    text-shadow: 0 0 20px rgba(78,205,196,0.4);
+}
+
+.planet-info-content .planet-type {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(78,205,196,0.2);
+}
+
+.planet-info-content .stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(100,150,255,0.15);
+}
+
+.planet-info-content .stat-label {
+    font-size: 1rem;
+    color: rgba(180,200,230,0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.planet-info-content .stat-value {
+    font-size: 1.1rem;
+    color: #44a3ff;
+    font-weight: 600;
+}
+
+.planet-info-content .lock-hint {
+    margin-top: 30px;
+    padding: 15px;
+    background: rgba(68,163,255,0.1);
+    border-left: 3px solid rgba(68,163,255,0.5);
+    font-size: 0.95rem;
+    color: rgba(150,180,220,0.8);
+    font-style: italic;
+    border-radius: 5px;
+}
+
+/* ==========================================
+   HUD PANELS — panneaux retractables (DÉSACTIVÉS)
    ========================================== */
 
 .hud-panel {
-    position: fixed;
-    z-index: 100;
-    display: flex;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hud-panel.hidden {
-    display: none;
+    display: none !important;
 }
 
 .hud-tab {
