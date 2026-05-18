@@ -844,6 +844,11 @@ function clearAllPlanetLabels() {
 // ========================================
 // Animation Cinématique - Core Logic
 // ========================================
+// Duration: 7s total
+// Phase 1 (0-2s): Slow acceleration, distance counter appears after 0.5s
+// Phase 2 (2-5s): Fast travel with warp effect and planet labels
+// Phase 3 (5-7s): Deceleration, UI elements fade in
+// Skip indicator: Appears after 1s, allows instant skip to final position
 
 function calculateCinematicProgress(elapsed) {
     const duration = 7000;
@@ -1038,27 +1043,6 @@ function startCinematicAnimation() {
     });
 }
 
-// DEPRECATED - Replaced by updateCinematicAnimation
-// function updateCameraAnimation() {
-//     if (!cameraAnimation || !cameraAnimation.active) return;
-//
-//     const elapsed = Date.now() - cameraAnimation.startTime;
-//     const progress = Math.min(elapsed / cameraAnimation.duration, 1);
-//     const eased = 1 - Math.pow(1 - progress, 3);
-//
-//     camera.position.x = cameraAnimation.startPos.x + (cameraAnimation.endPos.x - cameraAnimation.startPos.x) * eased;
-//     camera.position.y = cameraAnimation.startPos.y + (cameraAnimation.endPos.y - cameraAnimation.startPos.y) * eased;
-//     camera.position.z = cameraAnimation.startPos.z + (cameraAnimation.endPos.z - cameraAnimation.startPos.z) * eased;
-//
-//     const lookTarget = cameraAnimation.lookTarget || new THREE.Vector3(0, 0, 0);
-//     camera.lookAt(lookTarget);
-//
-//     if (progress >= 1) {
-//         cameraAnimation.active = false;
-//         controls.target.copy(lookTarget);
-//     }
-// }
-
 function updateCinematicAnimation() {
     if (!cinematicAnimation || !cinematicAnimation.active) return;
 
@@ -1104,10 +1088,13 @@ function updateCinematicAnimation() {
     // Animation complete
     if (progress >= 1) {
         cinematicAnimation.active = false;
+        controls.enabled = true;
         controls.target.set(0, 0, 0);
+        introActive = false;
         hideSkipIndicator();
         clearAllPlanetLabels();
         updateWarpEffect(0);
+        document.querySelectorAll('.hud-panel').forEach(p => p.classList.remove('hidden'));
 
         // Reset label flags
         Object.values(planets).forEach(planet => {
