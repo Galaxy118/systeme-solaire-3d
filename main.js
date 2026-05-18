@@ -1012,10 +1012,13 @@ function setupIntroAnimation() {
 }
 
 function startCinematicAnimation() {
-    const startPos = { x: 0, y: 300, z: 500 };
+    // Use current camera position as start (in case it was moved by controls or other animations)
+    const startPos = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
     const endPos = { x: 80, y: 60, z: 120 };
     const duration = 7000;
     const startTime = Date.now();
+
+    console.log('[CINEMATIC] Starting animation from', startPos, 'to', endPos);
 
     cinematicAnimation = {
         startPos,
@@ -1029,6 +1032,8 @@ function startCinematicAnimation() {
     // Create UI overlays
     skipIndicator = createSkipIndicator();
     distanceCounter = createDistanceCounter();
+
+    console.log('[CINEMATIC] Animation active:', cinematicAnimation.active);
 
     // Show skip indicator after 1s
     setTimeout(() => {
@@ -1048,6 +1053,11 @@ function updateCinematicAnimation() {
 
     const elapsed = Date.now() - cinematicAnimation.startTime;
     const { progress, phase, phaseProgress, easedProgress } = calculateCinematicProgress(elapsed);
+
+    // Debug every second
+    if (Math.floor(elapsed / 1000) !== Math.floor((elapsed - 16) / 1000)) {
+        console.log(`[CINEMATIC] t=${(elapsed/1000).toFixed(1)}s phase=${phase} eased=${easedProgress.toFixed(3)} pos=(${camera.position.x.toFixed(0)}, ${camera.position.y.toFixed(0)}, ${camera.position.z.toFixed(0)})`);
+    }
 
     // Update camera position
     camera.position.x = cinematicAnimation.startPos.x +
