@@ -1055,14 +1055,43 @@ function updateCinematicAnimation() {
     const elapsed = Date.now() - cinematicAnimation.startTime;
     const progress = Math.min(elapsed / cinematicAnimation.duration, 1);
 
-    // Simple linear interpolation - no easing, no phases, just smooth movement
-    const t = progress;
+    // Smooth easing: ease-in-out cubic for elegant movement
+    const t = progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
+    // Update camera position
     camera.position.x = cinematicAnimation.startPos.x + (cinematicAnimation.endPos.x - cinematicAnimation.startPos.x) * t;
     camera.position.y = cinematicAnimation.startPos.y + (cinematicAnimation.endPos.y - cinematicAnimation.startPos.y) * t;
     camera.position.z = cinematicAnimation.startPos.z + (cinematicAnimation.endPos.z - cinematicAnimation.startPos.z) * t;
 
     camera.lookAt(0, 0, 0);
+
+    // Very subtle warp effect (only if intensity is significant)
+    if (progress > 0.2 && progress < 0.8) {
+        const warpProgress = (progress - 0.2) / 0.6; // Normalize to 0-1
+        const warpIntensity = Math.sin(warpProgress * Math.PI) * 0.15; // Gentle sine curve, max 0.15
+
+        // Direct material access - no array iteration
+        if (starParticles[0]) {
+            starParticles[0].material.size = 0.5 + warpIntensity * 0.2;
+            starParticles[0].material.opacity = 0.8 - warpIntensity * 0.1;
+        }
+        if (starParticles[1]) {
+            starParticles[1].material.size = 0.8 + warpIntensity * 0.2;
+            starParticles[1].material.opacity = 0.9 - warpIntensity * 0.1;
+        }
+    } else if (progress <= 0.2 || progress >= 0.8) {
+        // Reset to base values at start and end
+        if (starParticles[0]) {
+            starParticles[0].material.size = 0.5;
+            starParticles[0].material.opacity = 0.8;
+        }
+        if (starParticles[1]) {
+            starParticles[1].material.size = 0.8;
+            starParticles[1].material.opacity = 0.9;
+        }
+    }
 
     // Animation complete
     if (progress >= 1) {
@@ -1072,6 +1101,16 @@ function updateCinematicAnimation() {
         introActive = false;
         hideSkipIndicator();
         document.querySelectorAll('.hud-panel').forEach(p => p.classList.remove('hidden'));
+
+        // Reset star particles
+        if (starParticles[0]) {
+            starParticles[0].material.size = 0.5;
+            starParticles[0].material.opacity = 0.8;
+        }
+        if (starParticles[1]) {
+            starParticles[1].material.size = 0.8;
+            starParticles[1].material.opacity = 0.9;
+        }
     }
 }
 
