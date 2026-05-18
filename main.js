@@ -2151,14 +2151,21 @@ function showPlanetInfoFullscreen(data, planetKey) {
     // Créer les stats
     const stats = [];
     if (isSun) {
-        stats.push({ label: 'Rayon', value: '696 000 km' });
-        stats.push({ label: 'Masse', value: '1,989 × 10³⁰ kg' });
-        stats.push({ label: 'Température de surface', value: '5 505 °C' });
-        stats.push({ label: 'Composition', value: 'Hydrogène (73%), Hélium (25%)' });
+        stats.push({ label: 'Type', value: data.info.type });
+        stats.push({ label: 'Âge', value: data.info.age });
+        stats.push({ label: 'Diamètre', value: data.info.diameter });
+        stats.push({ label: 'Masse', value: data.info.masse });
+        stats.push({ label: 'Température de surface', value: data.info.temperature_surface });
+        stats.push({ label: 'Température du cœur', value: data.info.temperature_coeur });
+        stats.push({ label: 'Composition', value: data.info.composition });
+        stats.push({ label: 'Luminosité', value: data.info.luminosite });
+        stats.push({ label: 'Distance du centre galactique', value: data.info.distance_centre_galaxie });
     } else {
-        stats.push({ label: 'Rayon', value: data.radius + ' km' });
-        stats.push({ label: 'Distance du Soleil', value: data.distance + ' millions de km' });
-        stats.push({ label: 'Période orbitale', value: data.orbitalPeriod + ' jours terrestres' });
+        stats.push({ label: 'Type', value: data.info.type });
+        stats.push({ label: 'Diamètre', value: data.info.diametre });
+        stats.push({ label: 'Masse', value: data.info.masse });
+        stats.push({ label: 'Distance du Soleil', value: data.info.distance_soleil });
+        stats.push({ label: 'Période orbitale', value: data.info.periode_orbitale });
         stats.push({ label: 'Période de rotation', value: Math.abs(data.rotationPeriod) + ' jours terrestres' });
     }
 
@@ -2181,7 +2188,11 @@ function showPlanetInfoFullscreen(data, planetKey) {
 
     const hint = document.createElement('div');
     hint.className = 'lock-hint';
-    hint.textContent = '💡 Cliquez sur une autre planète pour afficher ses informations';
+    if (isSun) {
+        hint.textContent = '☀️ Le Soleil représente 99,86% de la masse totale du système solaire. Cliquez sur une planète pour explorer les autres corps célestes.';
+    } else {
+        hint.textContent = '💡 Cliquez sur une autre planète ou sur le Soleil pour afficher d\'autres informations.';
+    }
     contentEl.appendChild(hint);
 
     document.getElementById('planet-info-fullscreen').classList.add('visible');
