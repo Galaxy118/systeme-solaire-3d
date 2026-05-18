@@ -989,36 +989,53 @@ function setupSkipListeners() {
 // ========================================
 
 function setupIntroAnimation() {
-    setupSkipListeners();
     const startBtn = document.getElementById('start-btn');
     const introScreen = document.getElementById('intro-screen');
 
+    // Setup skip listeners (active dès le début)
+    setupSkipListeners();
+
     startBtn.addEventListener('click', () => {
         introScreen.classList.add('fade-out');
-        startCameraAnimation();
+        startCinematicAnimation();
 
         setTimeout(() => {
             introScreen.classList.add('hidden');
-            introActive = false;
-            controls.enabled = true;
-            document.querySelectorAll('.hud-panel').forEach(p => p.classList.remove('hidden'));
+            // Note: introActive et controls seront gérés par l'animation
         }, 1500);
     });
 }
 
-function startCameraAnimation() {
-    const startPos = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+function startCinematicAnimation() {
+    const startPos = { x: 0, y: 300, z: 500 };
     const endPos = { x: 80, y: 60, z: 120 };
-    const duration = 3000; // 3 secondes
+    const duration = 7000;
     const startTime = Date.now();
-    
-    cameraAnimation = {
+
+    cinematicAnimation = {
         startPos,
         endPos,
         duration,
         startTime,
-        active: true
+        active: true,
+        skipped: false
     };
+
+    // Create UI overlays
+    skipIndicator = createSkipIndicator();
+    distanceCounter = createDistanceCounter();
+
+    // Show skip indicator after 1s
+    setTimeout(() => {
+        if (cinematicAnimation && cinematicAnimation.active) {
+            showSkipIndicator();
+        }
+    }, 1000);
+
+    // Reset planet label flags
+    Object.values(planets).forEach(planet => {
+        if (planet.labelShown) delete planet.labelShown;
+    });
 }
 
 // DEPRECATED - Replaced by updateCinematicAnimation
