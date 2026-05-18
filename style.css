@@ -551,10 +551,8 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
+    display: block;
+    padding: 0;
     overflow-y: auto;
 }
 
@@ -564,12 +562,13 @@ body {
 }
 
 .close-planet-info {
-    position: absolute;
+    position: fixed;
     top: 30px;
     right: 30px;
     width: 44px;
     height: 44px;
     background: rgba(220, 60, 60, 0.15);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(220, 60, 60, 0.4);
     border-radius: 4px;
     color: rgba(220, 80, 80, 0.9);
@@ -580,7 +579,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    z-index: 1101;
+    z-index: 1102;
 }
 
 .close-planet-info:hover {
@@ -592,6 +591,8 @@ body {
 .planet-info-content {
     max-width: 900px;
     width: 100%;
+    margin: 0 auto;
+    padding: 100px 40px 60px 40px;
     color: var(--color-text-primary);
     font-family: 'Exo 2', sans-serif;
     line-height: 1.7;
@@ -1468,5 +1469,33 @@ body {
 
     .planet-label {
         font-size: 14px;
+    }
+
+    /* Documentation et info planète fullscreen */
+    .planet-info-content {
+        padding: 80px 20px 40px 20px;
+    }
+
+    .planet-info-content h2 {
+        font-size: 1.6rem;
+        margin-bottom: 8px;
+    }
+
+    .planet-info-content h3 {
+        font-size: 1.1rem;
+        margin: 25px 0 12px 0;
+    }
+
+    .planet-info-content p,
+    .planet-info-content li {
+        font-size: 0.85rem;
+    }
+
+    .close-planet-info {
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
     }
 }
