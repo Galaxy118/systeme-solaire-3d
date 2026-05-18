@@ -2107,14 +2107,21 @@ function setupMenu() {
     // Fermer avec l'overlay
     menuOverlay.addEventListener('click', closeMenu);
 
+    // Empêcher le scroll via l'overlay sur mobile
+    menuOverlay.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+    }, { passive: false });
+
     function openMenu() {
         sideMenu.classList.add('open');
         menuOverlay.classList.add('active');
         menuToggle.classList.add('active');
-        // Empêcher le scroll du body sur mobile
+        // Empêcher le scroll du body sur mobile de manière plus agressive
         document.body.style.overflow = 'hidden';
         document.body.style.position = 'fixed';
         document.body.style.width = '100%';
+        document.body.style.height = '100%';
+        document.documentElement.style.overflow = 'hidden';
     }
 
     function closeMenu() {
@@ -2125,6 +2132,8 @@ function setupMenu() {
         document.body.style.overflow = '';
         document.body.style.position = '';
         document.body.style.width = '';
+        document.body.style.height = '';
+        document.documentElement.style.overflow = '';
     }
 }
 

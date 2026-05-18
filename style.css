@@ -1479,6 +1479,58 @@ body {
         padding-top: 10px !important;
         margin-top: 10px !important;
     }
+
+    /* Menu burger - réduction des espacements pour mobile */
+    .side-menu {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 70px 20px 20px 20px !important;
+    }
+
+    .side-menu-section {
+        margin-bottom: 25px !important;
+    }
+
+    .side-menu-title {
+        font-size: 0.65rem !important;
+        margin-bottom: 15px !important;
+        padding-bottom: 8px !important;
+    }
+
+    .side-menu-divider {
+        margin: 20px 0 !important;
+    }
+
+    .pause-button {
+        padding: 14px !important;
+        font-size: 0.9rem !important;
+        gap: 10px !important;
+    }
+
+    .pause-button .pause-icon {
+        font-size: 1.2rem !important;
+    }
+
+    .speed-value {
+        font-size: 2rem !important;
+        margin-bottom: 20px !important;
+    }
+
+    .speed-btns button {
+        padding: 14px 0 !important;
+        font-size: 1rem !important;
+    }
+
+    .hud-toggle {
+        padding: 12px 15px !important;
+        font-size: 0.7rem !important;
+        margin-bottom: 8px !important;
+    }
+
+    .doc-button {
+        padding: 14px 18px !important;
+        font-size: 0.85rem !important;
+    }
 }
 
 /* Très grands écrans (1920px et plus) */
