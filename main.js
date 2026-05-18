@@ -743,6 +743,7 @@ function init() {
     setupEventListeners();
     setupMenu();
     setupPlanetInfoFullscreen();
+    setupDocumentation();
     setupIntroAnimation();
     
     // Démarrer l'animation
@@ -2168,6 +2169,111 @@ function closePlanetInfo() {
     const fullscreenEl = document.getElementById('planet-info-fullscreen');
     fullscreenEl.classList.remove('visible');
     lockedPlanet = null;
+}
+
+// ========================================
+// Documentation
+// ========================================
+
+function setupDocumentation() {
+    const docBtn = document.getElementById('show-doc');
+
+    docBtn.addEventListener('click', () => {
+        showDocumentation();
+        // Fermer le menu
+        const sideMenu = document.getElementById('side-menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+        const menuToggle = document.getElementById('menu-toggle');
+        sideMenu.classList.remove('open');
+        menuOverlay.classList.remove('active');
+        menuToggle.classList.remove('active');
+    });
+}
+
+function showDocumentation() {
+    const contentEl = document.getElementById('planet-info-content');
+    contentEl.textContent = '';
+
+    // Titre principal
+    const title = document.createElement('h2');
+    title.textContent = 'Simulation du Système Solaire';
+    contentEl.appendChild(title);
+
+    const subtitle = document.createElement('div');
+    subtitle.className = 'planet-type';
+    subtitle.textContent = 'Documentation scientifique et technique';
+    contentEl.appendChild(subtitle);
+
+    // Section 1: Importance
+    const h3_1 = document.createElement('h3');
+    h3_1.textContent = 'Pourquoi représenter le système solaire ?';
+    contentEl.appendChild(h3_1);
+
+    const p1 = document.createElement('p');
+    p1.textContent = 'La représentation du système solaire est fondamentale pour la compréhension de notre place dans l\'univers. Elle permet de visualiser les échelles astronomiques, les relations gravitationnelles entre les corps célestes, et les dynamiques orbitales qui régissent notre environnement cosmique.';
+    contentEl.appendChild(p1);
+
+    const p2 = document.createElement('p');
+    p2.textContent = 'Au-delà de l\'aspect éducatif, ces simulations sont utilisées par les agences spatiales (NASA, ESA) pour la planification de missions, le calcul de trajectoires interplanétaires, et la prédiction de phénomènes astronomiques. Elles constituent un outil essentiel pour la recherche en mécanique céleste et l\'astronomie.';
+    contentEl.appendChild(p2);
+
+    // Section 2: Complexité
+    const h3_2 = document.createElement('h3');
+    h3_2.textContent = 'La complexité de la représentation';
+    contentEl.appendChild(h3_2);
+
+    const p3 = document.createElement('p');
+    p3.textContent = 'Représenter fidèlement le système solaire pose plusieurs défis scientifiques et techniques majeurs :';
+    contentEl.appendChild(p3);
+
+    const ul1 = document.createElement('ul');
+    const challenges = [
+        'Échelles de distances : Le rapport entre la taille du Soleil et l\'orbite de Neptune dépasse 1:4000, rendant impossible une représentation à l\'échelle réelle.',
+        'Échelles de tailles : Jupiter est 1000 fois plus petit que le Soleil, la Terre 10 fois plus petite que Jupiter. Une échelle fidèle rendrait les planètes invisibles.',
+        'Excentricité des orbites : Les orbites elliptiques varient de quasi-circulaires (Vénus, e=0.007) à très excentriques (Mercure, e=0.206).',
+        'Inclinaisons orbitales : Les plans orbitaux sont inclinés de 0° à 7° par rapport au plan de l\'écliptique.',
+        'Lois de Kepler : La vitesse orbitale varie selon la distance au Soleil (2ème loi), nécessitant des calculs continus.'
+    ];
+
+    challenges.forEach(challenge => {
+        const li = document.createElement('li');
+        li.textContent = challenge;
+        ul1.appendChild(li);
+    });
+    contentEl.appendChild(ul1);
+
+    // Section 3: Fonctionnement
+    const h3_3 = document.createElement('h3');
+    h3_3.textContent = 'Fonctionnement de cette simulation';
+    contentEl.appendChild(h3_3);
+
+    const p4 = document.createElement('p');
+    p4.innerHTML = '<strong>Modèle orbital :</strong> Utilisation des éléments orbitaux kepleriens pour calculer la position de chaque planète. Les orbites elliptiques sont simulées avec leur excentricité réelle, et la vitesse angulaire varie selon la 2ème loi de Kepler (v² ∝ 1/r).';
+    contentEl.appendChild(p4);
+
+    const p5 = document.createElement('p');
+    p5.innerHTML = '<strong>Rotations :</strong> Chaque corps céleste tourne sur son axe avec sa période et son inclinaison axiale réelles. Vénus et Uranus ont une rotation rétrograde (sens inverse).';
+    contentEl.appendChild(p5);
+
+    const p6 = document.createElement('p');
+    p6.innerHTML = '<strong>Échelles adaptatives :</strong> Les distances sont compressées logarithmiquement pour rendre le système visible, tandis que les tailles des planètes sont légèrement exagérées pour rester perceptibles.';
+    contentEl.appendChild(p6);
+
+    const p7 = document.createElement('p');
+    p7.innerHTML = '<strong>Rendu 3D :</strong> Utilisation de Three.js (WebGL) pour le rendu temps réel, avec textures photographiques NASA/JPL et calculs d\'éclairage basés sur la position du Soleil.';
+    contentEl.appendChild(p7);
+
+    const p8 = document.createElement('p');
+    p8.innerHTML = '<strong>Performances :</strong> Optimisation via requestAnimationFrame (60 FPS), instancing pour la ceinture d\'astéroïdes (10000+ objets), et frustum culling pour les objets hors champ.';
+    contentEl.appendChild(p8);
+
+    // Note finale
+    const hint = document.createElement('div');
+    hint.className = 'lock-hint';
+    hint.textContent = 'Cette simulation éducative offre un compromis entre exactitude scientifique et lisibilité visuelle, permettant d\'explorer les concepts fondamentaux de la mécanique céleste de manière interactive.';
+    contentEl.appendChild(hint);
+
+    document.getElementById('planet-info-fullscreen').classList.add('visible');
 }
 
 // ========================================

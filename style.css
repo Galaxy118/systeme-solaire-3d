@@ -4,10 +4,22 @@
     box-sizing: border-box;
 }
 
+:root {
+    --color-bg-primary: #0a0e17;
+    --color-bg-secondary: #0f1419;
+    --color-accent-primary: #2d9cdb;
+    --color-accent-secondary: #56ccf2;
+    --color-text-primary: #e8eef3;
+    --color-text-secondary: #8b9cae;
+    --color-border: rgba(45, 156, 219, 0.2);
+    --color-panel-bg: rgba(10, 14, 23, 0.95);
+}
+
 body {
     overflow: hidden;
-    background: #000;
+    background: var(--color-bg-primary);
     font-family: 'Exo 2', sans-serif;
+    color: var(--color-text-primary);
 }
 
 #container {
@@ -132,7 +144,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(ellipse at center, #0a0a1a 0%, #000005 100%);
+    background: radial-gradient(ellipse at center, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
     z-index: 1000;
     display: flex;
     justify-content: center;
@@ -233,14 +245,13 @@ body {
 
 .intro-title .letter {
     display: inline-block;
-    background: linear-gradient(180deg, #fff 0%, #4ecdc4 50%, #44a3ff 100%);
+    background: linear-gradient(180deg, var(--color-text-primary) 0%, var(--color-accent-secondary) 50%, var(--color-accent-primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     opacity: 0;
     transform: translateY(50px) rotateX(90deg);
     animation: letterReveal 0.8s ease forwards;
-    text-shadow: 0 0 40px rgba(78, 205, 196, 0.5);
 }
 
 .intro-title .letter:nth-child(1) { animation-delay: 0.1s; }
@@ -272,12 +283,13 @@ body {
 .intro-subtitle {
     font-family: 'Exo 2', sans-serif;
     font-size: clamp(1rem, 3vw, 1.5rem);
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-text-secondary);
     letter-spacing: 8px;
     text-transform: uppercase;
     margin-bottom: 50px;
     opacity: 0;
     animation: fadeInUp 1s ease forwards 1.8s;
+    font-weight: 300;
 }
 
 @keyframes fadeInUp {
@@ -297,18 +309,18 @@ body {
     gap: 15px;
     padding: 18px 40px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 0.9rem;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: #fff;
-    background: linear-gradient(135deg, rgba(78, 205, 196, 0.2) 0%, rgba(68, 163, 255, 0.2) 100%);
-    border: 2px solid rgba(78, 205, 196, 0.5);
-    border-radius: 50px;
+    color: var(--color-text-primary);
+    background: linear-gradient(135deg, rgba(45, 156, 219, 0.15) 0%, rgba(86, 204, 242, 0.15) 100%);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 4px;
     cursor: pointer;
     opacity: 0;
-    animation: fadeInUp 1s ease forwards 2.2s, glow 2s ease-in-out infinite 3s;
-    transition: all 0.4s ease;
+    animation: fadeInUp 1s ease forwards 2.2s;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
@@ -329,10 +341,10 @@ body {
 }
 
 #start-btn:hover {
-    background: linear-gradient(135deg, rgba(78, 205, 196, 0.4) 0%, rgba(68, 163, 255, 0.4) 100%);
-    border-color: #4ecdc4;
-    transform: scale(1.05);
-    box-shadow: 0 0 40px rgba(78, 205, 196, 0.4);
+    background: linear-gradient(135deg, rgba(45, 156, 219, 0.3) 0%, rgba(86, 204, 242, 0.3) 100%);
+    border-color: var(--color-accent-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(45, 156, 219, 0.3);
 }
 
 #start-btn svg {
@@ -376,10 +388,10 @@ body {
     right: 20px;
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, rgba(8,8,28,0.95) 0%, rgba(15,15,46,0.92) 100%);
+    background: var(--color-panel-bg);
     backdrop-filter: blur(12px);
-    border: 2px solid rgba(78,205,196,0.4);
-    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
     cursor: pointer;
     z-index: 1000;
     display: flex;
@@ -399,17 +411,17 @@ body {
 }
 
 .menu-toggle:hover {
-    background: linear-gradient(135deg, rgba(8,8,28,1) 0%, rgba(15,15,46,0.98) 100%);
-    border-color: rgba(78,205,196,0.6);
-    box-shadow: 0 0 20px rgba(78,205,196,0.3);
+    background: rgba(15, 20, 25, 0.98);
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 4px 12px rgba(45, 156, 219, 0.2);
 }
 
 .menu-toggle span {
     display: block;
-    width: 28px;
-    height: 3px;
-    background: rgba(78,205,196,0.9);
-    border-radius: 2px;
+    width: 26px;
+    height: 2px;
+    background: var(--color-accent-primary);
+    border-radius: 1px;
     transition: all 0.3s ease;
 }
 
@@ -433,17 +445,17 @@ body {
     position: fixed;
     top: 0;
     right: 0;
-    width: 340px;
+    width: 380px;
     height: 100vh;
-    background: linear-gradient(180deg, rgba(10,10,30,0.98) 0%, rgba(5,5,20,0.98) 100%);
+    background: var(--color-panel-bg);
     backdrop-filter: blur(20px);
-    border-left: 1px solid rgba(78,205,196,0.15);
+    border-left: 1px solid var(--color-border);
     z-index: 999;
     transform: translateX(100%);
     transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 90px 30px 30px 30px;
     overflow-y: auto;
-    box-shadow: -10px 0 50px rgba(0,0,0,0.8);
+    box-shadow: -10px 0 50px rgba(0,0,0,0.9);
 }
 
 .side-menu.open {
@@ -456,19 +468,19 @@ body {
 
 .side-menu-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 4px;
-    color: rgba(78,205,196,0.5);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--color-text-secondary);
     margin-bottom: 25px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(78,205,196,0.15);
+    border-bottom: 1px solid var(--color-border);
     text-transform: uppercase;
 }
 
 .side-menu-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(78,205,196,0.2), transparent);
+    background: linear-gradient(90deg, transparent, var(--color-border), transparent);
     margin: 40px 0;
 }
 
@@ -491,6 +503,38 @@ body {
     pointer-events: auto;
 }
 
+/* Documentation button */
+.doc-button {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(45, 156, 219, 0.08);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 4px;
+    color: var(--color-accent-secondary);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.doc-button:hover {
+    background: rgba(45, 156, 219, 0.15);
+    border-color: var(--color-accent-secondary);
+    box-shadow: 0 4px 12px rgba(45, 156, 219, 0.2);
+    transform: translateY(-2px);
+}
+
+.doc-button::before {
+    content: "📖";
+    font-size: 1.2rem;
+}
+
 /* ==========================================
    FENÊTRE PLEIN ÉCRAN INFO PLANÈTE
    ========================================== */
@@ -501,7 +545,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(8,8,28,0.98) 0%, rgba(15,15,46,0.96) 100%);
+    background: var(--color-panel-bg);
     backdrop-filter: blur(20px);
     z-index: 1100;
     opacity: 0;
@@ -521,15 +565,15 @@ body {
 
 .close-planet-info {
     position: absolute;
-    top: 25px;
-    right: 25px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, rgba(255,80,80,0.2) 0%, rgba(200,50,50,0.2) 100%);
-    border: 2px solid rgba(255,80,80,0.5);
-    border-radius: 10px;
-    color: rgba(255,100,100,0.9);
-    font-size: 1.8rem;
+    top: 30px;
+    right: 30px;
+    width: 44px;
+    height: 44px;
+    background: rgba(220, 60, 60, 0.15);
+    border: 1px solid rgba(220, 60, 60, 0.4);
+    border-radius: 4px;
+    color: rgba(220, 80, 80, 0.9);
+    font-size: 1.5rem;
     font-weight: 300;
     cursor: pointer;
     display: flex;
@@ -540,67 +584,96 @@ body {
 }
 
 .close-planet-info:hover {
-    background: linear-gradient(135deg, rgba(255,80,80,0.4) 0%, rgba(200,50,50,0.4) 100%);
-    border-color: rgba(255,80,80,0.8);
-    box-shadow: 0 0 20px rgba(255,80,80,0.4);
-    transform: rotate(90deg);
+    background: rgba(220, 60, 60, 0.25);
+    border-color: rgba(220, 60, 60, 0.7);
+    box-shadow: 0 4px 12px rgba(220, 60, 60, 0.3);
 }
 
 .planet-info-content {
-    max-width: 800px;
+    max-width: 900px;
     width: 100%;
-    color: rgba(255,255,255,0.9);
+    color: var(--color-text-primary);
     font-family: 'Exo 2', sans-serif;
+    line-height: 1.7;
 }
 
 .planet-info-content h2 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 3px;
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
     margin-bottom: 10px;
-    color: #4ecdc4;
-    text-shadow: 0 0 20px rgba(78,205,196,0.4);
+    color: var(--color-accent-secondary);
+}
+
+.planet-info-content h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin: 30px 0 15px 0;
+    color: var(--color-accent-primary);
 }
 
 .planet-info-content .planet-type {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.5);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 30px;
     padding-bottom: 15px;
-    border-bottom: 2px solid rgba(78,205,196,0.2);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .planet-info-content .stat {
     display: flex;
     justify-content: space-between;
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(100,150,255,0.15);
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(45, 156, 219, 0.1);
 }
 
 .planet-info-content .stat-label {
-    font-size: 1rem;
-    color: rgba(180,200,230,0.7);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    font-weight: 400;
 }
 
 .planet-info-content .stat-value {
-    font-size: 1.1rem;
-    color: #44a3ff;
-    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-accent-secondary);
+    font-weight: 500;
 }
 
 .planet-info-content .lock-hint {
     margin-top: 30px;
-    padding: 15px;
-    background: rgba(68,163,255,0.1);
-    border-left: 3px solid rgba(68,163,255,0.5);
+    padding: 15px 20px;
+    background: rgba(45, 156, 219, 0.08);
+    border-left: 2px solid var(--color-accent-primary);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    border-radius: 2px;
+}
+
+.planet-info-content p {
+    margin-bottom: 15px;
+    color: var(--color-text-secondary);
     font-size: 0.95rem;
-    color: rgba(150,180,220,0.8);
-    font-style: italic;
-    border-radius: 5px;
+}
+
+.planet-info-content ul {
+    margin: 15px 0;
+    padding-left: 25px;
+}
+
+.planet-info-content li {
+    margin-bottom: 10px;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+.planet-info-content strong {
+    color: var(--color-accent-secondary);
+    font-weight: 600;
 }
 
 /* ==========================================
@@ -803,13 +876,12 @@ body {
 .speed-value {
     font-family: 'Orbitron', sans-serif;
     font-size: 3rem;
-    font-weight: 700;
-    color: #4ecdc4;
+    font-weight: 600;
+    color: var(--color-accent-secondary);
     line-height: 1;
     text-align: center;
     display: block;
     margin-bottom: 30px;
-    text-shadow: 0 0 20px rgba(78,205,196,0.3);
 }
 
 .speed-btns {
@@ -820,23 +892,23 @@ body {
 
 .speed-btns button {
     flex: 1;
-    background: linear-gradient(135deg, rgba(78,205,196,0.08) 0%, rgba(78,205,196,0.15) 100%);
-    border: 1px solid rgba(78,205,196,0.3);
-    border-radius: 10px;
-    color: #4ecdc4;
+    background: rgba(45, 156, 219, 0.1);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 4px;
+    color: var(--color-accent-secondary);
     padding: 18px 0;
     font-family: 'Orbitron', sans-serif;
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .speed-btns button:hover {
-    background: linear-gradient(135deg, rgba(78,205,196,0.2) 0%, rgba(78,205,196,0.3) 100%);
-    border-color: rgba(78,205,196,0.6);
-    box-shadow: 0 0 25px rgba(78,205,196,0.3);
+    background: rgba(45, 156, 219, 0.2);
+    border-color: var(--color-accent-secondary);
+    box-shadow: 0 4px 12px rgba(45, 156, 219, 0.3);
     transform: translateY(-2px);
 }
 
@@ -849,51 +921,50 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 2px;
-    padding: 16px 20px;
-    border-radius: 10px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    padding: 14px 18px;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100%;
-    background: rgba(20,20,40,0.6);
-    border: 1px solid rgba(100,150,200,0.2);
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    background: rgba(15, 20, 30, 0.5);
+    border: 1px solid rgba(139, 156, 174, 0.2);
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .hud-toggle:hover {
-    background: rgba(30,30,50,0.8);
-    border-color: rgba(100,150,200,0.4);
-    transform: translateX(5px);
+    background: rgba(20, 25, 35, 0.7);
+    border-color: var(--color-border);
+    transform: translateX(3px);
 }
 
 .hud-toggle.active {
-    background: linear-gradient(135deg, rgba(78,205,196,0.15) 0%, rgba(68,163,255,0.15) 100%);
-    border-color: rgba(78,205,196,0.5);
-    color: #4ecdc4;
-    box-shadow: 0 0 20px rgba(78,205,196,0.2);
+    background: rgba(45, 156, 219, 0.12);
+    border-color: var(--color-accent-primary);
+    color: var(--color-accent-secondary);
+    box-shadow: 0 2px 10px rgba(45, 156, 219, 0.2);
 }
 
 .hud-toggle.active:hover {
-    border-color: rgba(78,205,196,0.7);
+    border-color: var(--color-accent-secondary);
 }
 
 .toggle-dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: currentColor;
     flex-shrink: 0;
-    box-shadow: 0 0 10px currentColor;
     transition: all 0.3s ease;
 }
 
-.hud-toggle:hover .toggle-dot {
-    transform: scale(1.2);
+.hud-toggle.active .toggle-dot {
+    box-shadow: 0 0 8px currentColor;
 }
 
 /* Selecteur planetes — dots */
