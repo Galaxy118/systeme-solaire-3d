@@ -859,15 +859,15 @@ function calculateCinematicProgress(elapsed) {
     if (progress < 0.286) { // Phase 1: 0-2s (2/7 = 0.286)
         phase = 1;
         phaseProgress = progress / 0.286;
-        easedProgress = EASING.easeInCubic(phaseProgress);
+        easedProgress = EASING.easeInCubic(phaseProgress) * 0.2; // 0 to 0.2
     } else if (progress < 0.714) { // Phase 2: 2-5s (5/7 = 0.714)
         phase = 2;
         phaseProgress = (progress - 0.286) / 0.428;
-        easedProgress = 0.2 + (EASING.easeInOutCubic(phaseProgress) * 0.6);
+        easedProgress = 0.2 + (EASING.easeInOutCubic(phaseProgress) * 0.6); // 0.2 to 0.8
     } else { // Phase 3: 5-7s
         phase = 3;
         phaseProgress = (progress - 0.714) / 0.286;
-        easedProgress = 0.8 + (EASING.easeOutCubic(phaseProgress) * 0.2);
+        easedProgress = 0.8 + (EASING.easeOutCubic(phaseProgress) * 0.2); // 0.8 to 1.0
     }
 
     return { progress, phase, phaseProgress, easedProgress };
