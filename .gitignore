@@ -1,6 +1,8 @@
 # Claude Code configuration (contains local paths and settings)
 .claude/
 .superpowers/
+docs/
+CLAUDE.md
 
 # macOS system files
 .DS_Store
