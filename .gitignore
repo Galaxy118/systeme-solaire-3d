@@ -1,0 +1,32 @@
+# Claude Code configuration (contains local paths and settings)
+.claude/
+.superpowers/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.log
+*.tmp
+*.temp
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs (if any in future)
+dist/
+build/
+*.min.js
+*.min.css
