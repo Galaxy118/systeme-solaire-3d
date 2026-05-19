@@ -6,6 +6,22 @@ Une simulation interactive et scientifiquement exacte du système solaire en 3D,
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+## 🎓 Contexte du Projet
+
+Ce projet a été réalisé dans le cadre d'un **projet scolaire** visant à comparer la représentation du système solaire par une **intelligence artificielle** versus un humain.
+
+**Le résultat ?** Ce système solaire 3D a été développé à **99% avec Claude Opus 4.6** (Anthropic), une IA de dernière génération spécialisée dans le développement logiciel.
+
+### Objectifs Pédagogiques
+- Évaluer la capacité d'une IA à produire un projet scientifique complet et fonctionnel
+- Comparer l'approche algorithmique vs. humaine dans la résolution de problèmes de visualisation 3D
+- Démontrer les limites et possibilités de l'IA générative en 2026
+
+### Méthodologie
+- **Direction humaine** : Définition des objectifs, validation des choix scientifiques
+- **Développement IA** : Architecture, code, optimisations, documentation
+- **Collaboration** : Itérations successives pour atteindre exactitude scientifique et UX professionnelle
+
 ## 🌟 Caractéristiques
 
 ### Simulation Scientifique
